@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.qim.loan.dao.employee.EmployeeUserDao" >
+  	<resultMap id="IndividualResultMap" type="com.qim.loan.entity.employee.EmployeeUser">
+    	<id column="id" property="id" jdbcType="VARCHAR" />	
+    	<result column="employee_department_id" property="employeeDepartmentId" jdbcType="VARCHAR" />
+    	<result column="employee_number" property="employeeNumber" jdbcType="VARCHAR" />
+    	<result column="employee_telphone" property="employeeTelphone" jdbcType="VARCHAR" />
+    	<result column="employee_real_name" property="employeeRealName" jdbcType="VARCHAR" />
+    	<result column="gender" property="gender" jdbcType="TINYINT" />
+    	<result column="employee_user_name" property="employeeUserName" jdbcType="VARCHAR" />
+    	<result column="employee_user_password" property="employeeUserPassword" jdbcType="VARCHAR" />
+    	<result column="console_user_id" property="consoleUserId" jdbcType="VARCHAR" />
+    	<result column="is_online" property="isOnline" jdbcType="TINYINT" />
+    	<result column="create_date" property="createDate" jdbcType="BIGINT" />
+    	<result column="create_time" property="createTime" jdbcType="BIGINT" />
+  	</resultMap>
+	<!--请在以下空白处编写新的SQL(仅限Java开发人员使用)-->
+ 	
+</mapper>

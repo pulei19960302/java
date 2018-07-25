@@ -1,0 +1,598 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.qim.loan.dao.employee.EmployeeDepartmentDao" >
+	<resultMap id="ResultMap" type="com.qim.loan.entity.employee.EmployeeDepartment">
+    	<id column="id" property="id" jdbcType="VARCHAR" />	
+    	<result column="employee_department_name" property="employeeDepartmentName" jdbcType="VARCHAR" />
+    	<result column="is_track" property="isTrack" jdbcType="TINYINT" />
+    	<result column="is_online" property="isOnline" jdbcType="TINYINT" />
+    	<result column="create_date" property="createDate" jdbcType="BIGINT" />
+    	<result column="create_time" property="createTime" jdbcType="BIGINT" />
+	</resultMap>
+	
+	 	
+
+
+	
+	<!--根据条件获取列表页-->
+
+
+	<!--根据条件分页查询-->
+  	<select id="getListRelative" resultType="map" parameterType="map">
+		select 
+		<if test="fieldLs == null or fieldLs.size()==0">
+			employeeDepartment.*
+		</if>
+		<if test="fieldLs != null and fieldLs.size()>0" >   
+			<foreach collection="fieldLs" item = "field" separator=",">
+				 employeeDepartment.${field}
+			</foreach>			
+		</if>
+		<if test="fieldLrs != null and fieldLrs.size()>0" >   
+			,
+			<foreach collection="fieldLrs" item = "field" separator=",">
+				 ${field}
+			</foreach>			
+		</if>
+		from employee_department employeeDepartment
+		<trim prefix="where" prefixOverrides="and">
+			<if test="record.id != null and record.id != ''" >    
+				and employeeDepartment.id like  '%${record.id}%'
+			</if>
+			<if test="record.employeeDepartmentName != null and record.employeeDepartmentName != ''" >    
+				and employeeDepartment.employee_department_name like  '%${record.employeeDepartmentName}%'
+			</if>
+			<if test="record.isTrack != null" >
+				and employeeDepartment.is_track =  #{record.isTrack,jdbcType=TINYINT}
+			</if> 
+			<if test="record.isOnline != null" >
+				and employeeDepartment.is_online =  #{record.isOnline,jdbcType=TINYINT}
+			</if> 
+			<if test="record.createDate != null" >
+				and employeeDepartment.create_date =  #{record.createDate,jdbcType=BIGINT}
+			</if> 
+			<if test="record.createTime != null" >
+				and employeeDepartment.create_time =  #{record.createTime,jdbcType=BIGINT}
+			</if> 
+		</trim>
+		<if test="groupByLs != null and groupByLs.size()>0" >
+			<trim prefix="group by " prefixOverrides=",">
+				<foreach collection="groupByLs" item = "groupBy" separator=",">
+					 employeeDepartment.${groupBy}
+				</foreach>
+			</trim>
+		</if>
+		<if test="orderByLs != null and orderByLs.size()>0" >
+			<trim prefix="order by " prefixOverrides=",">
+				<foreach collection="orderByLs" item = "orderBy" separator=",">
+					 employeeDepartment.${orderBy}
+				</foreach>
+			</trim>
+		</if>
+		<if test="orderByLs == null or orderByLs.size ==0">
+			order by employeeDepartment.create_date desc,employeeDepartment.create_time desc
+		</if>		
+	</select>
+	
+	<!--根据条件分页查询-->
+  	<select id="getListRelativeByParams" resultType="map" parameterType="map">
+		select 
+		<if test="fieldLs == null or fieldLs.size()==0">
+			employeeDepartment.*
+		</if>
+		<if test="fieldLs != null and fieldLs.size()>0" >   
+			<foreach collection="fieldLs" item = "field" separator=",">
+				 employeeDepartment.${field}
+			</foreach>			
+		</if>
+		<if test="fieldLrs != null and fieldLrs.size()>0" >   
+			,
+			<foreach collection="fieldLrs" item = "field" separator=",">
+				 ${field}
+			</foreach>			
+		</if>		
+		from employee_department employeeDepartment
+		<trim prefix="where" prefixOverrides="and">
+			<foreach collection="whParams.keys" item = "key">
+				<if test="whParams[key]!=null and whParams[key].size()>0">
+					<trim prefix="and">
+						<foreach collection="whParams[key]" item = "item" open="(" separator=" or " close=")">
+							 employeeDepartment.${key}=#{item}
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+		</trim>
+		<if test="groupByLs != null and groupByLs.size()>0" >
+			<trim prefix="group by " prefixOverrides=",">
+				<foreach collection="groupByLs" item = "groupBy" separator=",">
+					 employeeDepartment.${groupBy}
+				</foreach>
+			</trim>
+		</if>		
+		<if test="orderByLs != null and orderByLs.size()>0" >
+			<trim prefix="order by " prefixOverrides=",">
+				<foreach collection="orderByLs" item = "orderBy" separator=",">
+					 employeeDepartment.${orderBy}
+				</foreach>
+			</trim>
+		</if>
+		<if test="orderByLs == null or orderByLs.size ==0">
+			order by employeeDepartment.create_date desc,employeeDepartment.create_time desc
+		</if>		
+	</select>	
+	
+
+		
+	<!--根据自己条件查询列表-->
+  	<select id="getList" resultType="employeeDepartment" parameterType="map">
+		select 
+		<if test="fields == null or fields == ''" >    
+			*
+		</if>
+		<if test="fields != null and fields != ''" >    
+			${fields}
+		</if>
+		from employee_department
+		<if test="record!=null">
+			<trim prefix="where" prefixOverrides="and">
+				<if test="record.id != null and record.id != ''" >    
+					and id=#{record.id,jdbcType=VARCHAR}
+				</if>
+				<if test="record.employeeDepartmentName != null and record.employeeDepartmentName != ''" >    
+					and employee_department_name=#{record.employeeDepartmentName,jdbcType=VARCHAR}
+				</if>
+				<if test="record.isTrack != null" >
+					and is_track =  #{record.isTrack,jdbcType=TINYINT}
+				</if>
+				<if test="record.isOnline != null" >
+					and is_online =  #{record.isOnline,jdbcType=TINYINT}
+				</if>
+				<if test="record.createDate != null" >
+					and create_date =  #{record.createDate,jdbcType=BIGINT}
+				</if>
+				<if test="record.createTime != null" >
+					and create_time =  #{record.createTime,jdbcType=BIGINT}
+				</if>
+			</trim>
+		</if>
+		<if test="groupBys != null and groupBys != ''" >
+			group by ${groupBys}
+		</if>
+		<if test="orderBys != null and orderBys != ''" >
+			 order by ${orderBys}
+		</if>
+		<if test="orderBys == null or orderBys == ''">
+			order by create_date desc,create_time desc
+		</if>	
+	</select>
+	
+	<!--根据自己条件查询列表-->
+  	<select id="getListByParams" resultType="employeeDepartment" parameterType="map">
+		select 
+		<if test="fields == null or fields == ''" >    
+			*
+		</if>
+		<if test="fields != null and fields != ''" >    
+			${fields}
+		</if>
+		from employee_department
+		<if test="whParams != null and whParams.size()>0" >
+			<trim prefix="where" prefixOverrides="and">
+				<foreach collection="whParams.keys" item = "key">
+					<if test="whParams[key]!=null and whParams[key].size()>0">
+						<trim prefix="and">
+							<foreach collection="whParams[key]" item = "item" open="(" separator=" or " close=")">
+								 ${key}=#{item}
+							</foreach>
+						</trim>
+					</if>
+				</foreach>	
+			</trim>
+		</if>
+		<if test="groupBys != null and groupBys != ''" >
+			group by ${groupBys}
+		</if>
+		<if test="orderBys != null and orderBys != ''" >
+			 order by ${orderBys}
+		</if>
+		<if test="orderBys == null or orderBys == ''">
+			order by create_date desc,create_time desc
+		</if>	
+	</select>		
+	
+	<select id="getOneRelativeByParams" resultType="map" parameterType="map">	
+		<if test="whParams!=null and whParams.size()>0">
+			select 
+			<if test="fieldLs == null or fieldLs.size()==0">
+				employeeDepartment.*
+			</if>
+			<if test="fieldLs != null and fieldLs.size()>0" >   
+				<foreach collection="fieldLs" item = "field" separator=",">
+					 employeeDepartment.${field}
+				</foreach>
+			</if>
+			<if test="fieldLrs != null and fieldLrs.size()>0" >   
+				,
+				<foreach collection="fieldLrs" item = "field" separator=",">
+					 ${field}
+				</foreach>
+			</if>			
+			from employee_department employeeDepartment
+			<trim prefix="where" prefixOverrides="and">
+				<foreach collection="whParams.keys" item = "key">
+					<if test="whParams[key]!=null and whParams[key].size()>0">
+						<trim prefix="and">
+							<foreach collection="whParams[key]" item = "item" separator=" and ">
+								 employeeDepartment.${key}=#{item}
+							</foreach>
+						</trim>
+					</if>
+				</foreach>
+			</trim>	
+		</if>	
+	</select>
+
+
+	<select id="getOneRelative" resultType="map" parameterType="map">	
+		<if test="record!=null">
+			select 
+			<if test="fieldLs == null or fieldLs.size()==0">
+				employeeDepartment.*
+			</if>
+			<if test="fieldLs != null and fieldLs.size()>0" >   
+				<foreach collection="fieldLs" item = "field" separator=",">
+					 employeeDepartment.${field}
+				</foreach>
+			</if>
+			<if test="fieldLrs != null and fieldLrs.size()>0" >   
+				,
+				<foreach collection="fieldLrs" item = "field" separator=",">
+					 ${field}
+				</foreach>
+			</if>			
+			from employee_department employeeDepartment
+			<trim prefix="where" prefixOverrides="and">
+				<if test="record.id != null and record.id != ''" >    
+					and employeeDepartment.id=#{record.id,jdbcType=VARCHAR}
+				</if>
+				<if test="record.employeeDepartmentName != null and record.employeeDepartmentName != ''" >    
+					and employeeDepartment.employee_department_name=#{record.employeeDepartmentName,jdbcType=VARCHAR}
+				</if>
+				<if test="record.isTrack != null" >
+					and employeeDepartment.is_track =  #{record.isTrack,jdbcType=TINYINT}
+				</if>
+				<if test="record.isOnline != null" >
+					and employeeDepartment.is_online =  #{record.isOnline,jdbcType=TINYINT}
+				</if>
+				<if test="record.createDate != null" >
+					and employeeDepartment.create_date =  #{record.createDate,jdbcType=BIGINT}
+				</if>
+				<if test="record.createTime != null" >
+					and employeeDepartment.create_time =  #{record.createTime,jdbcType=BIGINT}
+				</if>
+			</trim>
+		</if>	
+	</select>
+
+	
+	<select id="getOneRelativeById" resultType="map" parameterType="java.lang.String">	
+		<if test="id != null and id != ''" >
+			select 
+			<if test="fieldLs == null or fieldLs.size()==0">
+				employeeDepartment.*
+			</if>
+			<if test="fieldLs != null and fieldLs.size()>0" >   
+				<foreach collection="fieldLs" item = "field" separator=",">
+					 employeeDepartment.${field}
+				</foreach>			
+			</if>
+			<if test="fieldLrs != null and fieldLrs.size()>0" >   
+				,
+				<foreach collection="fieldLrs" item = "field" separator=",">
+					 ${field}
+				</foreach>			
+			</if>			
+			from employee_department employeeDepartment
+			where employeeDepartment.id =  #{id,jdbcType=VARCHAR}
+		</if>	
+	</select>
+	
+	<!--根据主键查询本表结果-->
+	<select id="getOneById" resultType="employeeDepartment" parameterType="map" >
+		<if test="id != null and id != ''" > 
+			select 
+			<if test="fields == null or fields == ''" >    
+				*
+			</if>
+			<if test="fields != null and fields != ''" >    
+				${fields}
+			</if>
+			from employee_department where id =  #{id,jdbcType=VARCHAR}
+		</if> 
+	</select>
+
+	<select id="getOne" resultType="employeeDepartment" parameterType="map" >
+		<if test="record!=null"> 
+			select 
+			<if test="fields == null or fields == ''" >    
+				*
+			</if>
+			<if test="fields != null and fields != ''" >    
+				${fields}
+			</if>
+			from employee_department 
+			<trim prefix="where" prefixOverrides="and">
+					<if test="record.id != null and record.id != ''" > 
+					    and id =#{record.id,jdbcType=VARCHAR}
+					</if>
+					<if test="record.employeeDepartmentName != null and record.employeeDepartmentName != ''" > 
+					    and employee_department_name =#{record.employeeDepartmentName,jdbcType=VARCHAR}
+					</if>
+					<if test="record.isTrack != null" >
+					    and is_track =#{record.isTrack,jdbcType=TINYINT}
+					</if>    
+					<if test="record.isOnline != null" >
+					    and is_online =#{record.isOnline,jdbcType=TINYINT}
+					</if>    
+					<if test="record.createDate != null" >
+					    and create_date =#{record.createDate,jdbcType=BIGINT}
+					</if>    
+					<if test="record.createTime != null" >
+					    and create_time =#{record.createTime,jdbcType=BIGINT}
+					</if>    
+			</trim>			
+		</if>	
+	</select>
+
+	<select id="getOneByParams" resultType="employeeDepartment" parameterType="map" >
+		<if test="whParams!=null and whParams.size()>0"> 
+			select 
+			<if test="fields == null or fields == ''" >    
+				*
+			</if>
+			<if test="fields != null and fields != ''" >    
+				${fields}
+			</if>
+			from employee_department 
+			<trim prefix="where" prefixOverrides="and">
+				<foreach collection="whParams.keys" item = "key">
+					<if test="whParams[key]!=null and whParams[key].size()>0">
+						<trim prefix="and">
+							<foreach collection="whParams[key]" item = "item" separator=" and ">
+								 ${key}=#{item}
+							</foreach>
+						</trim>
+					</if>
+				</foreach>
+			</trim>			
+		</if>	
+	</select>
+	
+	<!--查询记录总数专用语句-->
+	<select id="getCount" resultType="java.lang.Integer" parameterType="employeeDepartment">
+		select count(*) from employee_department
+		<trim prefix="where" prefixOverrides="and">
+			<if test="id != null and id != ''" >    
+				and id !=  #{ id,jdbcType= VARCHAR}
+			</if>
+			<if test="employeeDepartmentName != null and employeeDepartmentName != ''" >    
+				and employee_department_name =  #{ employeeDepartmentName,jdbcType= VARCHAR}
+			</if>					    
+			<if test="isTrack != null" >
+				and is_track =  #{isTrack,jdbcType=TINYINT}
+			</if>		    
+			<if test="isOnline != null" >
+				and is_online =  #{isOnline,jdbcType=TINYINT}
+			</if>		    
+			<if test="createDate != null" >
+				and create_date =  #{createDate,jdbcType=BIGINT}
+			</if>		    
+			<if test="createTime != null" >
+				and create_time =  #{createTime,jdbcType=BIGINT}
+			</if>		    
+		</trim>
+	</select>
+	
+	<!--根据条件查询记录数量(ID不等于)-->
+	<select id="getCountByParams" resultType="java.lang.Integer" parameterType="map">
+		select count(*) from employee_department
+		<trim prefix="where" prefixOverrides="and">
+			<foreach collection="whParams.keys" item = "key">
+				<if test="whParams[key]!=null and whParams[key].size()>0">
+					<trim prefix="and">
+						<foreach collection="whParams[key]" item = "item" separator=" and ">
+							 ${key}=#{item}
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+		</trim>
+	</select>	
+
+	<!--可选择插入 TODO://需要ID自动及datetime-->
+	<insert id="insert" parameterType="employeeDepartment" >
+		insert into employee_department
+		<trim prefix="(" suffix=")" suffixOverrides="," >
+			id,
+			<if test="employeeDepartmentName != null and employeeDepartmentName != ''" > 
+				employee_department_name,
+			</if>
+			<if test="isTrack != null" >
+				is_track,
+			</if>    
+			<if test="isOnline != null" >
+				is_online,
+			</if>    
+			create_date,create_time,
+    	</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides="," >
+		    <if test="id != null and id != ''" > 
+			    #{id,jdbcType=VARCHAR},
+			</if>
+			<if test="id == null or id == ''" > 
+			    REPLACE(UUID(),'-',''),
+			</if>
+			<if test="employeeDepartmentName != null and employeeDepartmentName != ''" > 
+			    #{employeeDepartmentName,jdbcType=VARCHAR},
+			</if>
+			<if test="isTrack != null" >
+			    #{isTrack,jdbcType=TINYINT},
+			</if>    
+			<if test="isOnline != null" >
+			    #{isOnline,jdbcType=TINYINT},
+			</if>    
+			DATE_FORMAT(NOW(),'%Y%m%d'),DATE_FORMAT(NOW(),'%H%i%S%f')/1000,		
+		</trim>
+	</insert>
+	
+	
+	
+	<!--批量插入-->
+	<insert id="insertBatch" parameterType="java.util.List">
+		insert into employee_department(id,employee_department_name,is_track,is_online,create_date,create_time) values 
+		<foreach collection="list" item="item" index="index" separator=",">
+			(REPLACE(UUID(),'-',''),#{item.employeeDepartmentName},#{item.isTrack},#{item.isOnline},DATE_FORMAT(NOW(),'%Y%m%d'),DATE_FORMAT(NOW(),'%H%i%S%f')/1000)
+		</foreach>
+	</insert>
+	
+	<!--根据传入的参数批量插入-->
+	<insert id="insertByParams" parameterType="map">
+		<if test="vlParamLs!=null and vlParamLs.size()>0">
+			insert into employee_department(id,
+			<if test="fields!=null and fields!=''">
+				${fields},
+			</if>		
+			create_date,create_time) values 
+			<foreach collection="vlParamLs" item="item" index="index" separator="," >
+ 				(REPLACE(UUID(),'-',''), 
+ 				<foreach collection="item.values" item = "value">
+					#{value},
+ 				</foreach>
+ 				DATE_FORMAT(NOW(),'%Y%m%d'),DATE_FORMAT(NOW(),'%H%i%S%f')/1000)
+			</foreach>
+		</if>
+	</insert>
+		
+	
+	<!--根据ID更新-->
+	<update id="updateById" parameterType="employeeDepartment" >
+		<if test="record!=null and record.id!=null and record.id!=''">
+			update employee_department
+			<set>
+				<if test="record.employeeDepartmentName != null and record.employeeDepartmentName != ''" > 
+					employee_department_name=  #{record.employeeDepartmentName,jdbcType=VARCHAR},
+				</if>
+				<if test="record.isTrack != null" >
+					is_track=  #{record.isTrack,jdbcType=TINYINT},
+				</if>    
+				<if test="record.isOnline != null" >
+					is_online=  #{record.isOnline,jdbcType=TINYINT},
+				</if>    
+			</set>
+			where id =  #{record.id,jdbcType=VARCHAR}
+		</if>  
+	</update> 
+
+	<!--根据多个条件多个值更新-->
+	<update id="updateByParams" parameterType="map">
+		<if test="record!=null">
+			update employee_department
+			<set>
+				<if test="record.employeeDepartmentName != null and record.employeeDepartmentName != ''" > 
+					employee_department_name=  #{record.employeeDepartmentName,jdbcType=VARCHAR},
+				</if>
+				<if test="record.isTrack != null" >
+					is_track=  #{record.isTrack,jdbcType=TINYINT},
+				</if>    
+				<if test="record.isOnline != null" >
+					is_online=  #{record.isOnline,jdbcType=TINYINT},
+				</if>    
+			</set>
+			<if test="whParamLs!=null and whParamLs.size()>0">
+				<trim prefix="where" prefixOverrides="and">
+					<foreach collection="whParam.keys" item = "key">
+						<if test="whParamLs[key]!=null and whParamLs[key].size()>0">
+							<trim prefix="and">
+								<foreach collection="whParamLs[key]" item = "item" separator=" and ">
+									 ${key}=#{item}
+								</foreach>
+							</trim>
+						</if>
+					</foreach>
+				</trim>
+			</if>
+		</if>
+	</update> 
+	
+    <!--删除全部-->
+	<delete id="deleteAll">
+		delete from employee_department
+	</delete>
+	
+	<!--根据条件删除-->
+	<delete id="delete" parameterType="employeeDepartment">
+		<if test="record!=null">
+			delete from employee_department 
+			<trim prefix="where" prefixOverrides="and">
+				<if test="record.id != null and record.id != ''" >    
+					and id =  #{record.id,jdbcType=VARCHAR}
+				</if>
+				<if test="record.employeeDepartmentName != null and record.employeeDepartmentName != ''" >    
+					and employee_department_name =  #{record.employeeDepartmentName,jdbcType=VARCHAR}
+				</if>
+			    <if test="record.isTrack != null" >
+					and is_track =  #{record.isTrack,jdbcType=TINYINT}
+				</if>    
+			    <if test="record.isOnline != null" >
+					and is_online =  #{record.isOnline,jdbcType=TINYINT}
+				</if>    
+			    <if test="record.createDate != null" >
+					and create_date =  #{record.createDate,jdbcType=BIGINT}
+				</if>    
+			    <if test="record.createTime != null" >
+					and create_time =  #{record.createTime,jdbcType=BIGINT}
+				</if>    
+			</trim>
+		</if>	
+	</delete>
+	
+	<!--根据多个字段多个值删除-->
+	<delete id="deleteByParams" parameterType="map" >
+		<if test="whParams!=null and whParams.size()>0">
+			delete from employee_department 
+			<trim prefix="where" prefixOverrides="and">
+				<foreach collection="whParams.keys" item = "key">
+					<if test="whParams[key]!=null and whParams[key].size()>0">
+						<trim prefix="and">
+							<foreach collection="whParams[key]" item = "item" open="(" separator=" or " close=")">
+								 ${key}=#{item}
+							</foreach>
+						</trim>
+					</if>
+				</foreach>
+			</trim>
+		</if>
+	</delete>
+	
+	<!--根据主键删除-->
+	<delete id="deleteById" parameterType="java.lang.String" >
+		<if test="id!= null and id!= ''">
+			delete from employee_department where id =  #{id,jdbcType=VARCHAR}
+		</if>
+	</delete>
+
+	<!--根据多个ID批量删除(普通结构)-->
+	<delete id = "deleteByIds" parameterType = "map">
+		<if test="idLs != null and idLs.size()>0">
+			delete from employee_department 
+			<trim prefix="where" prefixOverrides="and">
+				and id in 
+				<foreach collection="idLs" item = "id" open="(" separator="," close=")">
+					 #{id,jdbcType=VARCHAR}
+				</foreach>
+			</trim>
+		</if>
+	</delete>
+</mapper>
+

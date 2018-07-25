@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.qim.loan.dao.client.ClientDataDao" >
+  	<resultMap id="IndividualResultMap" type="com.qim.loan.entity.client.ClientData">
+    	<id column="id" property="id" jdbcType="VARCHAR" />	
+    	<result column="telphone_number" property="telphoneNumber" jdbcType="VARCHAR" />
+    	<result column="channel_id" property="channelId" jdbcType="VARCHAR" />
+    	<result column="channel_user_id" property="channelUserId" jdbcType="VARCHAR" />
+    	<result column="create_date" property="createDate" jdbcType="BIGINT" />
+    	<result column="create_time" property="createTime" jdbcType="BIGINT" />
+    	<result column="console_user_id" property="consoleUserId" jdbcType="VARCHAR" />
+    	<result column="distribute_date" property="distributeDate" jdbcType="BIGINT" />
+    	<result column="distribute_time" property="distributeTime" jdbcType="BIGINT" />
+    	<result column="employee_one_user_id" property="employeeOneUserId" jdbcType="VARCHAR" />
+    	<result column="is_dial" property="isDial" jdbcType="TINYINT" />
+    	<result column="is_purpose" property="isPurpose" jdbcType="TINYINT" />
+    	<result column="purpose_descript" property="purposeDescript" jdbcType="VARCHAR" />
+    	<result column="dial_date" property="dialDate" jdbcType="BIGINT" />
+    	<result column="dial_time" property="dialTime" jdbcType="BIGINT" />
+    	<result column="real_name" property="realName" jdbcType="VARCHAR" />
+    	<result column="is_real" property="isReal" jdbcType="TINYINT" />
+    	<result column="service_password" property="servicePassword" jdbcType="VARCHAR" />
+    	<result column="phone_use_year" property="phoneUseYear" jdbcType="VARCHAR" />
+    	<result column="identification_card_number" property="identificationCardNumber" jdbcType="VARCHAR" />
+    	<result column="seseam_score" property="seseamScore" jdbcType="BIGINT" />
+    	<result column="naughty_score" property="naughtyScore" jdbcType="BIGINT" />
+    	<result column="real_education" property="realEducation" jdbcType="VARCHAR" />
+    	<result column="is_house_loan" property="isHouseLoan" jdbcType="TINYINT" />
+    	<result column="is_accumulation_fund" property="isAccumulationFund" jdbcType="TINYINT" />
+    	<result column="is_creadit" property="isCreadit" jdbcType="TINYINT" />
+    	<result column="creadit" property="creadit" jdbcType="DECIMAL" />
+    	<result column="company_name" property="companyName" jdbcType="VARCHAR" />
+    	<result column="company_place" property="companyPlace" jdbcType="VARCHAR" />
+    	<result column="live_place" property="livePlace" jdbcType="VARCHAR" />
+    	<result column="contract_name_one" property="contractNameOne" jdbcType="VARCHAR" />
+    	<result column="contract_telphone_one" property="contractTelphoneOne" jdbcType="VARCHAR" />
+    	<result column="contract_relation_one" property="contractRelationOne" jdbcType="VARCHAR" />
+    	<result column="contract_name_two" property="contractNameTwo" jdbcType="VARCHAR" />
+    	<result column="contract_telphone_two" property="contractTelphoneTwo" jdbcType="VARCHAR" />
+    	<result column="contract_relation_two" property="contractRelationTwo" jdbcType="VARCHAR" />
+    	<result column="contract_name_three" property="contractNameThree" jdbcType="VARCHAR" />
+    	<result column="contract_telphone_three" property="contractTelphoneThree" jdbcType="VARCHAR" />
+    	<result column="contract_relation_three" property="contractRelationThree" jdbcType="VARCHAR" />
+    	<result column="contract_name_four" property="contractNameFour" jdbcType="VARCHAR" />
+    	<result column="contract_telphone_four" property="contractTelphoneFour" jdbcType="VARCHAR" />
+    	<result column="contract_relation_four" property="contractRelationFour" jdbcType="VARCHAR" />
+    	<result column="contract_name_five" property="contractNameFive" jdbcType="VARCHAR" />
+    	<result column="contract_telphone_five" property="contractTelphoneFive" jdbcType="VARCHAR" />
+    	<result column="contract_relation_five" property="contractRelationFive" jdbcType="VARCHAR" />
+    	<result column="os_version" property="osVersion" jdbcType="VARCHAR" />
+    	<result column="fill_date" property="fillDate" jdbcType="BIGINT" />
+    	<result column="fill_time" property="fillTime" jdbcType="BIGINT" />
+    	<result column="employee_two_user_id" property="employeeTwoUserId" jdbcType="VARCHAR" />
+    	<result column="is_fill" property="isFill" jdbcType="TINYINT" />
+    	<result column="is_hanle" property="isHanle" jdbcType="TINYINT" />
+    	<result column="handle_descript" property="handleDescript" jdbcType="VARCHAR" />
+    	<result column="handle_date" property="handleDate" jdbcType="BIGINT" />
+    	<result column="handle_time" property="handleTime" jdbcType="BIGINT" />
+  	</resultMap>
+	<!--请在以下空白处编写新的SQL(仅限Java开发人员使用)-->
+ 	
+</mapper>

@@ -1,0 +1,639 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.qim.loan.dao.console.ConsoleUserLoginRecordDao" >
+	<resultMap id="ResultMap" type="com.qim.loan.entity.console.ConsoleUserLoginRecord">
+    	<id column="id" property="id" jdbcType="VARCHAR" />	
+    	<result column="console_user_id" property="consoleUserId" jdbcType="VARCHAR" />
+    	<result column="ip_address" property="ipAddress" jdbcType="VARCHAR" />
+    	<result column="os_version" property="osVersion" jdbcType="VARCHAR" />
+    	<result column="browse_version" property="browseVersion" jdbcType="VARCHAR" />
+    	<result column="create_date" property="createDate" jdbcType="BIGINT" />
+    	<result column="create_time" property="createTime" jdbcType="BIGINT" />
+	</resultMap>
+	
+	 	
+
+
+	
+	<!--根据条件获取列表页-->
+
+
+	<!--根据条件分页查询-->
+  	<select id="getListRelative" resultType="map" parameterType="map">
+		select 
+		<if test="fieldLs == null or fieldLs.size()==0">
+			consoleUserLoginRecord.*
+		</if>
+		<if test="fieldLs != null and fieldLs.size()>0" >   
+			<foreach collection="fieldLs" item = "field" separator=",">
+				 consoleUserLoginRecord.${field}
+			</foreach>			
+		</if>
+		<if test="fieldLrs != null and fieldLrs.size()>0" >   
+			,
+			<foreach collection="fieldLrs" item = "field" separator=",">
+				 ${field}
+			</foreach>			
+		</if>
+		,consoleUser.console_user_name	
+		from console_user_login_record consoleUserLoginRecord
+		left join console_user	consoleUser on consoleUser.id=consoleUserLoginRecord.console_user_id
+		<trim prefix="where" prefixOverrides="and">
+			<if test="record.id != null and record.id != ''" >    
+				and consoleUserLoginRecord.id like  '%${record.id}%'
+			</if>
+			<if test="record.consoleUserId != null and record.consoleUserId != ''" >    
+				and consoleUserLoginRecord.console_user_id like  '%${record.consoleUserId}%'
+			</if>
+			<if test="record.ipAddress != null and record.ipAddress != ''" >    
+				and consoleUserLoginRecord.ip_address like  '%${record.ipAddress}%'
+			</if>
+			<if test="record.osVersion != null and record.osVersion != ''" >    
+				and consoleUserLoginRecord.os_version like  '%${record.osVersion}%'
+			</if>
+			<if test="record.browseVersion != null and record.browseVersion != ''" >    
+				and consoleUserLoginRecord.browse_version like  '%${record.browseVersion}%'
+			</if>
+			<if test="record.createDate != null" >
+				and consoleUserLoginRecord.create_date =  #{record.createDate,jdbcType=BIGINT}
+			</if> 
+			<if test="record.createTime != null" >
+				and consoleUserLoginRecord.create_time =  #{record.createTime,jdbcType=BIGINT}
+			</if> 
+		</trim>
+		<if test="groupByLs != null and groupByLs.size()>0" >
+			<trim prefix="group by " prefixOverrides=",">
+				<foreach collection="groupByLs" item = "groupBy" separator=",">
+					 consoleUserLoginRecord.${groupBy}
+				</foreach>
+			</trim>
+		</if>
+		<if test="orderByLs != null and orderByLs.size()>0" >
+			<trim prefix="order by " prefixOverrides=",">
+				<foreach collection="orderByLs" item = "orderBy" separator=",">
+					 consoleUserLoginRecord.${orderBy}
+				</foreach>
+			</trim>
+		</if>
+		<if test="orderByLs == null or orderByLs.size ==0">
+			order by consoleUserLoginRecord.create_date desc,consoleUserLoginRecord.create_time desc
+		</if>		
+	</select>
+	
+	<!--根据条件分页查询-->
+  	<select id="getListRelativeByParams" resultType="map" parameterType="map">
+		select 
+		<if test="fieldLs == null or fieldLs.size()==0">
+			consoleUserLoginRecord.*
+		</if>
+		<if test="fieldLs != null and fieldLs.size()>0" >   
+			<foreach collection="fieldLs" item = "field" separator=",">
+				 consoleUserLoginRecord.${field}
+			</foreach>			
+		</if>
+		<if test="fieldLrs != null and fieldLrs.size()>0" >   
+			,
+			<foreach collection="fieldLrs" item = "field" separator=",">
+				 ${field}
+			</foreach>			
+		</if>		
+		,consoleUser.console_user_name	
+		from console_user_login_record consoleUserLoginRecord
+		left join console_user	consoleUser on consoleUser.id=consoleUserLoginRecord.console_user_id
+		<trim prefix="where" prefixOverrides="and">
+			<foreach collection="whParams.keys" item = "key">
+				<if test="whParams[key]!=null and whParams[key].size()>0">
+					<trim prefix="and">
+						<foreach collection="whParams[key]" item = "item" open="(" separator=" or " close=")">
+							 consoleUserLoginRecord.${key}=#{item}
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+		</trim>
+		<if test="groupByLs != null and groupByLs.size()>0" >
+			<trim prefix="group by " prefixOverrides=",">
+				<foreach collection="groupByLs" item = "groupBy" separator=",">
+					 consoleUserLoginRecord.${groupBy}
+				</foreach>
+			</trim>
+		</if>		
+		<if test="orderByLs != null and orderByLs.size()>0" >
+			<trim prefix="order by " prefixOverrides=",">
+				<foreach collection="orderByLs" item = "orderBy" separator=",">
+					 consoleUserLoginRecord.${orderBy}
+				</foreach>
+			</trim>
+		</if>
+		<if test="orderByLs == null or orderByLs.size ==0">
+			order by consoleUserLoginRecord.create_date desc,consoleUserLoginRecord.create_time desc
+		</if>		
+	</select>	
+	
+
+		
+	<!--根据自己条件查询列表-->
+  	<select id="getList" resultType="consoleUserLoginRecord" parameterType="map">
+		select 
+		<if test="fields == null or fields == ''" >    
+			*
+		</if>
+		<if test="fields != null and fields != ''" >    
+			${fields}
+		</if>
+		from console_user_login_record
+		<if test="record!=null">
+			<trim prefix="where" prefixOverrides="and">
+				<if test="record.id != null and record.id != ''" >    
+					and id=#{record.id,jdbcType=VARCHAR}
+				</if>
+				<if test="record.consoleUserId != null and record.consoleUserId != ''" >    
+					and console_user_id=#{record.consoleUserId,jdbcType=VARCHAR}
+				</if>
+				<if test="record.ipAddress != null and record.ipAddress != ''" >    
+					and ip_address=#{record.ipAddress,jdbcType=VARCHAR}
+				</if>
+				<if test="record.osVersion != null and record.osVersion != ''" >    
+					and os_version=#{record.osVersion,jdbcType=VARCHAR}
+				</if>
+				<if test="record.browseVersion != null and record.browseVersion != ''" >    
+					and browse_version=#{record.browseVersion,jdbcType=VARCHAR}
+				</if>
+				<if test="record.createDate != null" >
+					and create_date =  #{record.createDate,jdbcType=BIGINT}
+				</if>
+				<if test="record.createTime != null" >
+					and create_time =  #{record.createTime,jdbcType=BIGINT}
+				</if>
+			</trim>
+		</if>
+		<if test="groupBys != null and groupBys != ''" >
+			group by ${groupBys}
+		</if>
+		<if test="orderBys != null and orderBys != ''" >
+			 order by ${orderBys}
+		</if>
+		<if test="orderBys == null or orderBys == ''">
+			order by create_date desc,create_time desc
+		</if>	
+	</select>
+	
+	<!--根据自己条件查询列表-->
+  	<select id="getListByParams" resultType="consoleUserLoginRecord" parameterType="map">
+		select 
+		<if test="fields == null or fields == ''" >    
+			*
+		</if>
+		<if test="fields != null and fields != ''" >    
+			${fields}
+		</if>
+		from console_user_login_record
+		<if test="whParams != null and whParams.size()>0" >
+			<trim prefix="where" prefixOverrides="and">
+				<foreach collection="whParams.keys" item = "key">
+					<if test="whParams[key]!=null and whParams[key].size()>0">
+						<trim prefix="and">
+							<foreach collection="whParams[key]" item = "item" open="(" separator=" or " close=")">
+								 ${key}=#{item}
+							</foreach>
+						</trim>
+					</if>
+				</foreach>	
+			</trim>
+		</if>
+		<if test="groupBys != null and groupBys != ''" >
+			group by ${groupBys}
+		</if>
+		<if test="orderBys != null and orderBys != ''" >
+			 order by ${orderBys}
+		</if>
+		<if test="orderBys == null or orderBys == ''">
+			order by create_date desc,create_time desc
+		</if>	
+	</select>		
+	
+	<select id="getOneRelativeByParams" resultType="map" parameterType="map">	
+		<if test="whParams!=null and whParams.size()>0">
+			select 
+			<if test="fieldLs == null or fieldLs.size()==0">
+				consoleUserLoginRecord.*
+			</if>
+			<if test="fieldLs != null and fieldLs.size()>0" >   
+				<foreach collection="fieldLs" item = "field" separator=",">
+					 consoleUserLoginRecord.${field}
+				</foreach>
+			</if>
+			<if test="fieldLrs != null and fieldLrs.size()>0" >   
+				,
+				<foreach collection="fieldLrs" item = "field" separator=",">
+					 ${field}
+				</foreach>
+			</if>			
+			,consoleUser.console_user_name	
+			from console_user_login_record consoleUserLoginRecord
+			left join console_user	consoleUser on consoleUser.id=consoleUserLoginRecord.console_user_id
+			<trim prefix="where" prefixOverrides="and">
+				<foreach collection="whParams.keys" item = "key">
+					<if test="whParams[key]!=null and whParams[key].size()>0">
+						<trim prefix="and">
+							<foreach collection="whParams[key]" item = "item" separator=" and ">
+								 consoleUserLoginRecord.${key}=#{item}
+							</foreach>
+						</trim>
+					</if>
+				</foreach>
+			</trim>	
+		</if>	
+	</select>
+
+
+	<select id="getOneRelative" resultType="map" parameterType="map">	
+		<if test="record!=null">
+			select 
+			<if test="fieldLs == null or fieldLs.size()==0">
+				consoleUserLoginRecord.*
+			</if>
+			<if test="fieldLs != null and fieldLs.size()>0" >   
+				<foreach collection="fieldLs" item = "field" separator=",">
+					 consoleUserLoginRecord.${field}
+				</foreach>
+			</if>
+			<if test="fieldLrs != null and fieldLrs.size()>0" >   
+				,
+				<foreach collection="fieldLrs" item = "field" separator=",">
+					 ${field}
+				</foreach>
+			</if>			
+			,consoleUser.console_user_name	
+			from console_user_login_record consoleUserLoginRecord
+			left join console_user	consoleUser on consoleUser.id=consoleUserLoginRecord.console_user_id
+			<trim prefix="where" prefixOverrides="and">
+				<if test="record.id != null and record.id != ''" >    
+					and consoleUserLoginRecord.id=#{record.id,jdbcType=VARCHAR}
+				</if>
+				<if test="record.consoleUserId != null and record.consoleUserId != ''" >    
+					and consoleUserLoginRecord.console_user_id=#{record.consoleUserId,jdbcType=VARCHAR}
+				</if>
+				<if test="record.ipAddress != null and record.ipAddress != ''" >    
+					and consoleUserLoginRecord.ip_address=#{record.ipAddress,jdbcType=VARCHAR}
+				</if>
+				<if test="record.osVersion != null and record.osVersion != ''" >    
+					and consoleUserLoginRecord.os_version=#{record.osVersion,jdbcType=VARCHAR}
+				</if>
+				<if test="record.browseVersion != null and record.browseVersion != ''" >    
+					and consoleUserLoginRecord.browse_version=#{record.browseVersion,jdbcType=VARCHAR}
+				</if>
+				<if test="record.createDate != null" >
+					and consoleUserLoginRecord.create_date =  #{record.createDate,jdbcType=BIGINT}
+				</if>
+				<if test="record.createTime != null" >
+					and consoleUserLoginRecord.create_time =  #{record.createTime,jdbcType=BIGINT}
+				</if>
+			</trim>
+		</if>	
+	</select>
+
+	
+	<select id="getOneRelativeById" resultType="map" parameterType="java.lang.String">	
+		<if test="id != null and id != ''" >
+			select 
+			<if test="fieldLs == null or fieldLs.size()==0">
+				consoleUserLoginRecord.*
+			</if>
+			<if test="fieldLs != null and fieldLs.size()>0" >   
+				<foreach collection="fieldLs" item = "field" separator=",">
+					 consoleUserLoginRecord.${field}
+				</foreach>			
+			</if>
+			<if test="fieldLrs != null and fieldLrs.size()>0" >   
+				,
+				<foreach collection="fieldLrs" item = "field" separator=",">
+					 ${field}
+				</foreach>			
+			</if>			
+			,consoleUser.console_user_name	
+			from console_user_login_record consoleUserLoginRecord
+			left join console_user	consoleUser on consoleUser.id=consoleUserLoginRecord.console_user_id
+			where consoleUserLoginRecord.id =  #{id,jdbcType=VARCHAR}
+		</if>	
+	</select>
+	
+	<!--根据主键查询本表结果-->
+	<select id="getOneById" resultType="consoleUserLoginRecord" parameterType="map" >
+		<if test="id != null and id != ''" > 
+			select 
+			<if test="fields == null or fields == ''" >    
+				*
+			</if>
+			<if test="fields != null and fields != ''" >    
+				${fields}
+			</if>
+			from console_user_login_record where id =  #{id,jdbcType=VARCHAR}
+		</if> 
+	</select>
+
+	<select id="getOne" resultType="consoleUserLoginRecord" parameterType="map" >
+		<if test="record!=null"> 
+			select 
+			<if test="fields == null or fields == ''" >    
+				*
+			</if>
+			<if test="fields != null and fields != ''" >    
+				${fields}
+			</if>
+			from console_user_login_record 
+			<trim prefix="where" prefixOverrides="and">
+					<if test="record.id != null and record.id != ''" > 
+					    and id =#{record.id,jdbcType=VARCHAR}
+					</if>
+					<if test="record.consoleUserId != null and record.consoleUserId != ''" > 
+					    and console_user_id =#{record.consoleUserId,jdbcType=VARCHAR}
+					</if>
+					<if test="record.ipAddress != null and record.ipAddress != ''" > 
+					    and ip_address =#{record.ipAddress,jdbcType=VARCHAR}
+					</if>
+					<if test="record.osVersion != null and record.osVersion != ''" > 
+					    and os_version =#{record.osVersion,jdbcType=VARCHAR}
+					</if>
+					<if test="record.browseVersion != null and record.browseVersion != ''" > 
+					    and browse_version =#{record.browseVersion,jdbcType=VARCHAR}
+					</if>
+					<if test="record.createDate != null" >
+					    and create_date =#{record.createDate,jdbcType=BIGINT}
+					</if>    
+					<if test="record.createTime != null" >
+					    and create_time =#{record.createTime,jdbcType=BIGINT}
+					</if>    
+			</trim>			
+		</if>	
+	</select>
+
+	<select id="getOneByParams" resultType="consoleUserLoginRecord" parameterType="map" >
+		<if test="whParams!=null and whParams.size()>0"> 
+			select 
+			<if test="fields == null or fields == ''" >    
+				*
+			</if>
+			<if test="fields != null and fields != ''" >    
+				${fields}
+			</if>
+			from console_user_login_record 
+			<trim prefix="where" prefixOverrides="and">
+				<foreach collection="whParams.keys" item = "key">
+					<if test="whParams[key]!=null and whParams[key].size()>0">
+						<trim prefix="and">
+							<foreach collection="whParams[key]" item = "item" separator=" and ">
+								 ${key}=#{item}
+							</foreach>
+						</trim>
+					</if>
+				</foreach>
+			</trim>			
+		</if>	
+	</select>
+	
+	<!--查询记录总数专用语句-->
+	<select id="getCount" resultType="java.lang.Integer" parameterType="consoleUserLoginRecord">
+		select count(*) from console_user_login_record
+		<trim prefix="where" prefixOverrides="and">
+			<if test="id != null and id != ''" >    
+				and id !=  #{ id,jdbcType= VARCHAR}
+			</if>
+			<if test="consoleUserId != null and consoleUserId != ''" >    
+				and console_user_id =  #{ consoleUserId,jdbcType= VARCHAR}
+			</if>					    
+			<if test="ipAddress != null and ipAddress != ''" >    
+				and ip_address =  #{ ipAddress,jdbcType= VARCHAR}
+			</if>					    
+			<if test="osVersion != null and osVersion != ''" >    
+				and os_version =  #{ osVersion,jdbcType= VARCHAR}
+			</if>					    
+			<if test="browseVersion != null and browseVersion != ''" >    
+				and browse_version =  #{ browseVersion,jdbcType= VARCHAR}
+			</if>					    
+			<if test="createDate != null" >
+				and create_date =  #{createDate,jdbcType=BIGINT}
+			</if>		    
+			<if test="createTime != null" >
+				and create_time =  #{createTime,jdbcType=BIGINT}
+			</if>		    
+		</trim>
+	</select>
+	
+	<!--根据条件查询记录数量(ID不等于)-->
+	<select id="getCountByParams" resultType="java.lang.Integer" parameterType="map">
+		select count(*) from console_user_login_record
+		<trim prefix="where" prefixOverrides="and">
+			<foreach collection="whParams.keys" item = "key">
+				<if test="whParams[key]!=null and whParams[key].size()>0">
+					<trim prefix="and">
+						<foreach collection="whParams[key]" item = "item" separator=" and ">
+							 ${key}=#{item}
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+		</trim>
+	</select>	
+
+	<!--可选择插入 TODO://需要ID自动及datetime-->
+	<insert id="insert" parameterType="consoleUserLoginRecord" >
+		insert into console_user_login_record
+		<trim prefix="(" suffix=")" suffixOverrides="," >
+			id,
+			<if test="consoleUserId != null and consoleUserId != ''" > 
+				console_user_id,
+			</if>
+			<if test="ipAddress != null and ipAddress != ''" > 
+				ip_address,
+			</if>
+			<if test="osVersion != null and osVersion != ''" > 
+				os_version,
+			</if>
+			<if test="browseVersion != null and browseVersion != ''" > 
+				browse_version,
+			</if>
+			create_date,create_time,
+    	</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides="," >
+		    <if test="id != null and id != ''" > 
+			    #{id,jdbcType=VARCHAR},
+			</if>
+			<if test="id == null or id == ''" > 
+			    REPLACE(UUID(),'-',''),
+			</if>
+			<if test="consoleUserId != null and consoleUserId != ''" > 
+			    #{consoleUserId,jdbcType=VARCHAR},
+			</if>
+			<if test="ipAddress != null and ipAddress != ''" > 
+			    #{ipAddress,jdbcType=VARCHAR},
+			</if>
+			<if test="osVersion != null and osVersion != ''" > 
+			    #{osVersion,jdbcType=VARCHAR},
+			</if>
+			<if test="browseVersion != null and browseVersion != ''" > 
+			    #{browseVersion,jdbcType=VARCHAR},
+			</if>
+			DATE_FORMAT(NOW(),'%Y%m%d'),DATE_FORMAT(NOW(),'%H%i%S%f')/1000,		
+		</trim>
+	</insert>
+	
+	
+	
+	<!--批量插入-->
+	<insert id="insertBatch" parameterType="java.util.List">
+		insert into console_user_login_record(id,console_user_id,ip_address,os_version,browse_version,create_date,create_time) values 
+		<foreach collection="list" item="item" index="index" separator=",">
+			(REPLACE(UUID(),'-',''),#{item.consoleUserId},#{item.ipAddress},#{item.osVersion},#{item.browseVersion},DATE_FORMAT(NOW(),'%Y%m%d'),DATE_FORMAT(NOW(),'%H%i%S%f')/1000)
+		</foreach>
+	</insert>
+	
+	<!--根据传入的参数批量插入-->
+	<insert id="insertByParams" parameterType="map">
+		<if test="vlParamLs!=null and vlParamLs.size()>0">
+			insert into console_user_login_record(id,
+			<if test="fields!=null and fields!=''">
+				${fields},
+			</if>		
+			create_date,create_time) values 
+			<foreach collection="vlParamLs" item="item" index="index" separator="," >
+ 				(REPLACE(UUID(),'-',''), 
+ 				<foreach collection="item.values" item = "value">
+					#{value},
+ 				</foreach>
+ 				DATE_FORMAT(NOW(),'%Y%m%d'),DATE_FORMAT(NOW(),'%H%i%S%f')/1000)
+			</foreach>
+		</if>
+	</insert>
+		
+	
+	<!--根据ID更新-->
+	<update id="updateById" parameterType="consoleUserLoginRecord" >
+		<if test="record!=null and record.id!=null and record.id!=''">
+			update console_user_login_record
+			<set>
+				<if test="record.consoleUserId != null and record.consoleUserId != ''" > 
+					console_user_id=  #{record.consoleUserId,jdbcType=VARCHAR},
+				</if>
+				<if test="record.ipAddress != null and record.ipAddress != ''" > 
+					ip_address=  #{record.ipAddress,jdbcType=VARCHAR},
+				</if>
+				<if test="record.osVersion != null and record.osVersion != ''" > 
+					os_version=  #{record.osVersion,jdbcType=VARCHAR},
+				</if>
+				<if test="record.browseVersion != null and record.browseVersion != ''" > 
+					browse_version=  #{record.browseVersion,jdbcType=VARCHAR},
+				</if>
+			</set>
+			where id =  #{record.id,jdbcType=VARCHAR}
+		</if>  
+	</update> 
+
+	<!--根据多个条件多个值更新-->
+	<update id="updateByParams" parameterType="map">
+		<if test="record!=null">
+			update console_user_login_record
+			<set>
+				<if test="record.consoleUserId != null and record.consoleUserId != ''" > 
+					console_user_id=  #{record.consoleUserId,jdbcType=VARCHAR},
+				</if>
+				<if test="record.ipAddress != null and record.ipAddress != ''" > 
+					ip_address=  #{record.ipAddress,jdbcType=VARCHAR},
+				</if>
+				<if test="record.osVersion != null and record.osVersion != ''" > 
+					os_version=  #{record.osVersion,jdbcType=VARCHAR},
+				</if>
+				<if test="record.browseVersion != null and record.browseVersion != ''" > 
+					browse_version=  #{record.browseVersion,jdbcType=VARCHAR},
+				</if>
+			</set>
+			<if test="whParamLs!=null and whParamLs.size()>0">
+				<trim prefix="where" prefixOverrides="and">
+					<foreach collection="whParam.keys" item = "key">
+						<if test="whParamLs[key]!=null and whParamLs[key].size()>0">
+							<trim prefix="and">
+								<foreach collection="whParamLs[key]" item = "item" separator=" and ">
+									 ${key}=#{item}
+								</foreach>
+							</trim>
+						</if>
+					</foreach>
+				</trim>
+			</if>
+		</if>
+	</update> 
+	
+    <!--删除全部-->
+	<delete id="deleteAll">
+		delete from console_user_login_record
+	</delete>
+	
+	<!--根据条件删除-->
+	<delete id="delete" parameterType="consoleUserLoginRecord">
+		<if test="record!=null">
+			delete from console_user_login_record 
+			<trim prefix="where" prefixOverrides="and">
+				<if test="record.id != null and record.id != ''" >    
+					and id =  #{record.id,jdbcType=VARCHAR}
+				</if>
+				<if test="record.consoleUserId != null and record.consoleUserId != ''" >    
+					and console_user_id =  #{record.consoleUserId,jdbcType=VARCHAR}
+				</if>
+				<if test="record.ipAddress != null and record.ipAddress != ''" >    
+					and ip_address =  #{record.ipAddress,jdbcType=VARCHAR}
+				</if>
+				<if test="record.osVersion != null and record.osVersion != ''" >    
+					and os_version =  #{record.osVersion,jdbcType=VARCHAR}
+				</if>
+				<if test="record.browseVersion != null and record.browseVersion != ''" >    
+					and browse_version =  #{record.browseVersion,jdbcType=VARCHAR}
+				</if>
+			    <if test="record.createDate != null" >
+					and create_date =  #{record.createDate,jdbcType=BIGINT}
+				</if>    
+			    <if test="record.createTime != null" >
+					and create_time =  #{record.createTime,jdbcType=BIGINT}
+				</if>    
+			</trim>
+		</if>	
+	</delete>
+	
+	<!--根据多个字段多个值删除-->
+	<delete id="deleteByParams" parameterType="map" >
+		<if test="whParams!=null and whParams.size()>0">
+			delete from console_user_login_record 
+			<trim prefix="where" prefixOverrides="and">
+				<foreach collection="whParams.keys" item = "key">
+					<if test="whParams[key]!=null and whParams[key].size()>0">
+						<trim prefix="and">
+							<foreach collection="whParams[key]" item = "item" open="(" separator=" or " close=")">
+								 ${key}=#{item}
+							</foreach>
+						</trim>
+					</if>
+				</foreach>
+			</trim>
+		</if>
+	</delete>
+	
+	<!--根据主键删除-->
+	<delete id="deleteById" parameterType="java.lang.String" >
+		<if test="id!= null and id!= ''">
+			delete from console_user_login_record where id =  #{id,jdbcType=VARCHAR}
+		</if>
+	</delete>
+
+	<!--根据多个ID批量删除(普通结构)-->
+	<delete id = "deleteByIds" parameterType = "map">
+		<if test="idLs != null and idLs.size()>0">
+			delete from console_user_login_record 
+			<trim prefix="where" prefixOverrides="and">
+				and id in 
+				<foreach collection="idLs" item = "id" open="(" separator="," close=")">
+					 #{id,jdbcType=VARCHAR}
+				</foreach>
+			</trim>
+		</if>
+	</delete>
+</mapper>
+

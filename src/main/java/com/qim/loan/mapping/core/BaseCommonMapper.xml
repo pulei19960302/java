@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.qim.loan.core.dao.CommonDao">
+	<!-- 统计查询使用 -->
+	<select id="baseStatics" resultType="map" parameterType="map">
+		${sql}
+	</select>
+	<!-- 自动建表 -->
+	<update id="baseAlter" parameterType="map">
+		${sql}
+	</update>
+	<!-- 基础查询 -->
+	<select id="baseList" resultType="map" parameterType="map">
+		${sql}
+	</select>
+	<!-- 基础更新 -->
+	<update id="baseUpdate" parameterType="map">
+		${sql}
+	</update>
+	<!--基础插入 -->
+	<insert id="baseInsert" parameterType="map">
+		${sql}
+	</insert>
+	<!-- 基础删除 -->
+	<delete id="baseDelete" parameterType="map">
+		${sql}
+	</delete>
+	<select id="baseCount" resultType="java.lang.Integer" parameterType="map">
+		${sql}
+	</select>
+	<select id="baseQuery" resultType="java.lang.String" parameterType="map">
+		${sql}
+	</select>
+	<select id="baseOne" resultType="map" parameterType="map">
+		${sql}
+	</select>
+			
+</mapper>

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.qim.loan.dao.channel.ChannelUserDao" >
+  	<resultMap id="IndividualResultMap" type="com.qim.loan.entity.channel.ChannelUser">
+    	<id column="id" property="id" jdbcType="VARCHAR" />	
+    	<result column="channel_id" property="channelId" jdbcType="VARCHAR" />
+    	<result column="channel_user_name" property="channelUserName" jdbcType="VARCHAR" />
+    	<result column="channel_real_name" property="channelRealName" jdbcType="VARCHAR" />
+    	<result column="channel_user_pwd" property="channelUserPwd" jdbcType="VARCHAR" />
+    	<result column="contract_person" property="contractPerson" jdbcType="VARCHAR" />
+    	<result column="contract_telphone" property="contractTelphone" jdbcType="VARCHAR" />
+    	<result column="is_online" property="isOnline" jdbcType="TINYINT" />
+    	<result column="console_user_id" property="consoleUserId" jdbcType="VARCHAR" />
+    	<result column="create_date" property="createDate" jdbcType="BIGINT" />
+    	<result column="create_time" property="createTime" jdbcType="BIGINT" />
+  	</resultMap>
+	<!--请在以下空白处编写新的SQL(仅限Java开发人员使用)-->
+ 	
+</mapper>

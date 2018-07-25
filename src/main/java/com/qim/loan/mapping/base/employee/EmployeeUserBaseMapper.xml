@@ -1,0 +1,804 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.qim.loan.dao.employee.EmployeeUserDao" >
+	<resultMap id="ResultMap" type="com.qim.loan.entity.employee.EmployeeUser">
+    	<id column="id" property="id" jdbcType="VARCHAR" />	
+    	<result column="employee_department_id" property="employeeDepartmentId" jdbcType="VARCHAR" />
+    	<result column="employee_number" property="employeeNumber" jdbcType="VARCHAR" />
+    	<result column="employee_telphone" property="employeeTelphone" jdbcType="VARCHAR" />
+    	<result column="employee_real_name" property="employeeRealName" jdbcType="VARCHAR" />
+    	<result column="gender" property="gender" jdbcType="TINYINT" />
+    	<result column="employee_user_name" property="employeeUserName" jdbcType="VARCHAR" />
+    	<result column="employee_user_password" property="employeeUserPassword" jdbcType="VARCHAR" />
+    	<result column="console_user_id" property="consoleUserId" jdbcType="VARCHAR" />
+    	<result column="is_online" property="isOnline" jdbcType="TINYINT" />
+    	<result column="create_date" property="createDate" jdbcType="BIGINT" />
+    	<result column="create_time" property="createTime" jdbcType="BIGINT" />
+	</resultMap>
+	
+	 	
+
+
+	
+	<!--根据条件获取列表页-->
+
+
+	<!--根据条件分页查询-->
+  	<select id="getListRelative" resultType="map" parameterType="map">
+		select 
+		<if test="fieldLs == null or fieldLs.size()==0">
+			employeeUser.*
+		</if>
+		<if test="fieldLs != null and fieldLs.size()>0" >   
+			<foreach collection="fieldLs" item = "field" separator=",">
+				 employeeUser.${field}
+			</foreach>			
+		</if>
+		<if test="fieldLrs != null and fieldLrs.size()>0" >   
+			,
+			<foreach collection="fieldLrs" item = "field" separator=",">
+				 ${field}
+			</foreach>			
+		</if>
+		,employeeDepartment.employee_department_name	
+		,consoleUser.console_user_name	
+		from employee_user employeeUser
+		left join employee_department	employeeDepartment on employeeDepartment.id=employeeUser.employee_department_id
+		left join console_user	consoleUser on consoleUser.id=employeeUser.console_user_id
+		<trim prefix="where" prefixOverrides="and">
+			<if test="record.id != null and record.id != ''" >    
+				and employeeUser.id like  '%${record.id}%'
+			</if>
+			<if test="record.employeeDepartmentId != null and record.employeeDepartmentId != ''" >    
+				and employeeUser.employee_department_id like  '%${record.employeeDepartmentId}%'
+			</if>
+			<if test="record.employeeNumber != null and record.employeeNumber != ''" >    
+				and employeeUser.employee_number like  '%${record.employeeNumber}%'
+			</if>
+			<if test="record.employeeTelphone != null and record.employeeTelphone != ''" >    
+				and employeeUser.employee_telphone like  '%${record.employeeTelphone}%'
+			</if>
+			<if test="record.employeeRealName != null and record.employeeRealName != ''" >    
+				and employeeUser.employee_real_name like  '%${record.employeeRealName}%'
+			</if>
+			<if test="record.gender != null" >
+				and employeeUser.gender =  #{record.gender,jdbcType=TINYINT}
+			</if> 
+			<if test="record.employeeUserName != null and record.employeeUserName != ''" >    
+				and employeeUser.employee_user_name like  '%${record.employeeUserName}%'
+			</if>
+			<if test="record.employeeUserPassword != null and record.employeeUserPassword != ''" >    
+				and employeeUser.employee_user_password like  '%${record.employeeUserPassword}%'
+			</if>
+			<if test="record.consoleUserId != null and record.consoleUserId != ''" >    
+				and employeeUser.console_user_id like  '%${record.consoleUserId}%'
+			</if>
+			<if test="record.isOnline != null" >
+				and employeeUser.is_online =  #{record.isOnline,jdbcType=TINYINT}
+			</if> 
+			<if test="record.createDate != null" >
+				and employeeUser.create_date =  #{record.createDate,jdbcType=BIGINT}
+			</if> 
+			<if test="record.createTime != null" >
+				and employeeUser.create_time =  #{record.createTime,jdbcType=BIGINT}
+			</if> 
+		</trim>
+		<if test="groupByLs != null and groupByLs.size()>0" >
+			<trim prefix="group by " prefixOverrides=",">
+				<foreach collection="groupByLs" item = "groupBy" separator=",">
+					 employeeUser.${groupBy}
+				</foreach>
+			</trim>
+		</if>
+		<if test="orderByLs != null and orderByLs.size()>0" >
+			<trim prefix="order by " prefixOverrides=",">
+				<foreach collection="orderByLs" item = "orderBy" separator=",">
+					 employeeUser.${orderBy}
+				</foreach>
+			</trim>
+		</if>
+		<if test="orderByLs == null or orderByLs.size ==0">
+			order by employeeUser.create_date desc,employeeUser.create_time desc
+		</if>		
+	</select>
+	
+	<!--根据条件分页查询-->
+  	<select id="getListRelativeByParams" resultType="map" parameterType="map">
+		select 
+		<if test="fieldLs == null or fieldLs.size()==0">
+			employeeUser.*
+		</if>
+		<if test="fieldLs != null and fieldLs.size()>0" >   
+			<foreach collection="fieldLs" item = "field" separator=",">
+				 employeeUser.${field}
+			</foreach>			
+		</if>
+		<if test="fieldLrs != null and fieldLrs.size()>0" >   
+			,
+			<foreach collection="fieldLrs" item = "field" separator=",">
+				 ${field}
+			</foreach>			
+		</if>		
+		,employeeDepartment.employee_department_name	
+		,consoleUser.console_user_name	
+		from employee_user employeeUser
+		left join employee_department	employeeDepartment on employeeDepartment.id=employeeUser.employee_department_id
+		left join console_user	consoleUser on consoleUser.id=employeeUser.console_user_id
+		<trim prefix="where" prefixOverrides="and">
+			<foreach collection="whParams.keys" item = "key">
+				<if test="whParams[key]!=null and whParams[key].size()>0">
+					<trim prefix="and">
+						<foreach collection="whParams[key]" item = "item" open="(" separator=" or " close=")">
+							 employeeUser.${key}=#{item}
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+		</trim>
+		<if test="groupByLs != null and groupByLs.size()>0" >
+			<trim prefix="group by " prefixOverrides=",">
+				<foreach collection="groupByLs" item = "groupBy" separator=",">
+					 employeeUser.${groupBy}
+				</foreach>
+			</trim>
+		</if>		
+		<if test="orderByLs != null and orderByLs.size()>0" >
+			<trim prefix="order by " prefixOverrides=",">
+				<foreach collection="orderByLs" item = "orderBy" separator=",">
+					 employeeUser.${orderBy}
+				</foreach>
+			</trim>
+		</if>
+		<if test="orderByLs == null or orderByLs.size ==0">
+			order by employeeUser.create_date desc,employeeUser.create_time desc
+		</if>		
+	</select>	
+	
+
+		
+	<!--根据自己条件查询列表-->
+  	<select id="getList" resultType="employeeUser" parameterType="map">
+		select 
+		<if test="fields == null or fields == ''" >    
+			*
+		</if>
+		<if test="fields != null and fields != ''" >    
+			${fields}
+		</if>
+		from employee_user
+		<if test="record!=null">
+			<trim prefix="where" prefixOverrides="and">
+				<if test="record.id != null and record.id != ''" >    
+					and id=#{record.id,jdbcType=VARCHAR}
+				</if>
+				<if test="record.employeeDepartmentId != null and record.employeeDepartmentId != ''" >    
+					and employee_department_id=#{record.employeeDepartmentId,jdbcType=VARCHAR}
+				</if>
+				<if test="record.employeeNumber != null and record.employeeNumber != ''" >    
+					and employee_number=#{record.employeeNumber,jdbcType=VARCHAR}
+				</if>
+				<if test="record.employeeTelphone != null and record.employeeTelphone != ''" >    
+					and employee_telphone=#{record.employeeTelphone,jdbcType=VARCHAR}
+				</if>
+				<if test="record.employeeRealName != null and record.employeeRealName != ''" >    
+					and employee_real_name=#{record.employeeRealName,jdbcType=VARCHAR}
+				</if>
+				<if test="record.gender != null" >
+					and gender =  #{record.gender,jdbcType=TINYINT}
+				</if>
+				<if test="record.employeeUserName != null and record.employeeUserName != ''" >    
+					and employee_user_name=#{record.employeeUserName,jdbcType=VARCHAR}
+				</if>
+				<if test="record.employeeUserPassword != null and record.employeeUserPassword != ''" >    
+					and employee_user_password=#{record.employeeUserPassword,jdbcType=VARCHAR}
+				</if>
+				<if test="record.consoleUserId != null and record.consoleUserId != ''" >    
+					and console_user_id=#{record.consoleUserId,jdbcType=VARCHAR}
+				</if>
+				<if test="record.isOnline != null" >
+					and is_online =  #{record.isOnline,jdbcType=TINYINT}
+				</if>
+				<if test="record.createDate != null" >
+					and create_date =  #{record.createDate,jdbcType=BIGINT}
+				</if>
+				<if test="record.createTime != null" >
+					and create_time =  #{record.createTime,jdbcType=BIGINT}
+				</if>
+			</trim>
+		</if>
+		<if test="groupBys != null and groupBys != ''" >
+			group by ${groupBys}
+		</if>
+		<if test="orderBys != null and orderBys != ''" >
+			 order by ${orderBys}
+		</if>
+		<if test="orderBys == null or orderBys == ''">
+			order by create_date desc,create_time desc
+		</if>	
+	</select>
+	
+	<!--根据自己条件查询列表-->
+  	<select id="getListByParams" resultType="employeeUser" parameterType="map">
+		select 
+		<if test="fields == null or fields == ''" >    
+			*
+		</if>
+		<if test="fields != null and fields != ''" >    
+			${fields}
+		</if>
+		from employee_user
+		<if test="whParams != null and whParams.size()>0" >
+			<trim prefix="where" prefixOverrides="and">
+				<foreach collection="whParams.keys" item = "key">
+					<if test="whParams[key]!=null and whParams[key].size()>0">
+						<trim prefix="and">
+							<foreach collection="whParams[key]" item = "item" open="(" separator=" or " close=")">
+								 ${key}=#{item}
+							</foreach>
+						</trim>
+					</if>
+				</foreach>	
+			</trim>
+		</if>
+		<if test="groupBys != null and groupBys != ''" >
+			group by ${groupBys}
+		</if>
+		<if test="orderBys != null and orderBys != ''" >
+			 order by ${orderBys}
+		</if>
+		<if test="orderBys == null or orderBys == ''">
+			order by create_date desc,create_time desc
+		</if>	
+	</select>		
+	
+	<select id="getOneRelativeByParams" resultType="map" parameterType="map">	
+		<if test="whParams!=null and whParams.size()>0">
+			select 
+			<if test="fieldLs == null or fieldLs.size()==0">
+				employeeUser.*
+			</if>
+			<if test="fieldLs != null and fieldLs.size()>0" >   
+				<foreach collection="fieldLs" item = "field" separator=",">
+					 employeeUser.${field}
+				</foreach>
+			</if>
+			<if test="fieldLrs != null and fieldLrs.size()>0" >   
+				,
+				<foreach collection="fieldLrs" item = "field" separator=",">
+					 ${field}
+				</foreach>
+			</if>			
+			,employeeDepartment.employee_department_name	
+			,consoleUser.console_user_name	
+			from employee_user employeeUser
+			left join employee_department	employeeDepartment on employeeDepartment.id=employeeUser.employee_department_id
+			left join console_user	consoleUser on consoleUser.id=employeeUser.console_user_id
+			<trim prefix="where" prefixOverrides="and">
+				<foreach collection="whParams.keys" item = "key">
+					<if test="whParams[key]!=null and whParams[key].size()>0">
+						<trim prefix="and">
+							<foreach collection="whParams[key]" item = "item" separator=" and ">
+								 employeeUser.${key}=#{item}
+							</foreach>
+						</trim>
+					</if>
+				</foreach>
+			</trim>	
+		</if>	
+	</select>
+
+
+	<select id="getOneRelative" resultType="map" parameterType="map">	
+		<if test="record!=null">
+			select 
+			<if test="fieldLs == null or fieldLs.size()==0">
+				employeeUser.*
+			</if>
+			<if test="fieldLs != null and fieldLs.size()>0" >   
+				<foreach collection="fieldLs" item = "field" separator=",">
+					 employeeUser.${field}
+				</foreach>
+			</if>
+			<if test="fieldLrs != null and fieldLrs.size()>0" >   
+				,
+				<foreach collection="fieldLrs" item = "field" separator=",">
+					 ${field}
+				</foreach>
+			</if>			
+			,employeeDepartment.employee_department_name	
+			,consoleUser.console_user_name	
+			from employee_user employeeUser
+			left join employee_department	employeeDepartment on employeeDepartment.id=employeeUser.employee_department_id
+			left join console_user	consoleUser on consoleUser.id=employeeUser.console_user_id
+			<trim prefix="where" prefixOverrides="and">
+				<if test="record.id != null and record.id != ''" >    
+					and employeeUser.id=#{record.id,jdbcType=VARCHAR}
+				</if>
+				<if test="record.employeeDepartmentId != null and record.employeeDepartmentId != ''" >    
+					and employeeUser.employee_department_id=#{record.employeeDepartmentId,jdbcType=VARCHAR}
+				</if>
+				<if test="record.employeeNumber != null and record.employeeNumber != ''" >    
+					and employeeUser.employee_number=#{record.employeeNumber,jdbcType=VARCHAR}
+				</if>
+				<if test="record.employeeTelphone != null and record.employeeTelphone != ''" >    
+					and employeeUser.employee_telphone=#{record.employeeTelphone,jdbcType=VARCHAR}
+				</if>
+				<if test="record.employeeRealName != null and record.employeeRealName != ''" >    
+					and employeeUser.employee_real_name=#{record.employeeRealName,jdbcType=VARCHAR}
+				</if>
+				<if test="record.gender != null" >
+					and employeeUser.gender =  #{record.gender,jdbcType=TINYINT}
+				</if>
+				<if test="record.employeeUserName != null and record.employeeUserName != ''" >    
+					and employeeUser.employee_user_name=#{record.employeeUserName,jdbcType=VARCHAR}
+				</if>
+				<if test="record.employeeUserPassword != null and record.employeeUserPassword != ''" >    
+					and employeeUser.employee_user_password=#{record.employeeUserPassword,jdbcType=VARCHAR}
+				</if>
+				<if test="record.consoleUserId != null and record.consoleUserId != ''" >    
+					and employeeUser.console_user_id=#{record.consoleUserId,jdbcType=VARCHAR}
+				</if>
+				<if test="record.isOnline != null" >
+					and employeeUser.is_online =  #{record.isOnline,jdbcType=TINYINT}
+				</if>
+				<if test="record.createDate != null" >
+					and employeeUser.create_date =  #{record.createDate,jdbcType=BIGINT}
+				</if>
+				<if test="record.createTime != null" >
+					and employeeUser.create_time =  #{record.createTime,jdbcType=BIGINT}
+				</if>
+			</trim>
+		</if>	
+	</select>
+
+	
+	<select id="getOneRelativeById" resultType="map" parameterType="java.lang.String">	
+		<if test="id != null and id != ''" >
+			select 
+			<if test="fieldLs == null or fieldLs.size()==0">
+				employeeUser.*
+			</if>
+			<if test="fieldLs != null and fieldLs.size()>0" >   
+				<foreach collection="fieldLs" item = "field" separator=",">
+					 employeeUser.${field}
+				</foreach>			
+			</if>
+			<if test="fieldLrs != null and fieldLrs.size()>0" >   
+				,
+				<foreach collection="fieldLrs" item = "field" separator=",">
+					 ${field}
+				</foreach>			
+			</if>			
+			,employeeDepartment.employee_department_name	
+			,consoleUser.console_user_name	
+			from employee_user employeeUser
+			left join employee_department	employeeDepartment on employeeDepartment.id=employeeUser.employee_department_id
+			left join console_user	consoleUser on consoleUser.id=employeeUser.console_user_id
+			where employeeUser.id =  #{id,jdbcType=VARCHAR}
+		</if>	
+	</select>
+	
+	<!--根据主键查询本表结果-->
+	<select id="getOneById" resultType="employeeUser" parameterType="map" >
+		<if test="id != null and id != ''" > 
+			select 
+			<if test="fields == null or fields == ''" >    
+				*
+			</if>
+			<if test="fields != null and fields != ''" >    
+				${fields}
+			</if>
+			from employee_user where id =  #{id,jdbcType=VARCHAR}
+		</if> 
+	</select>
+
+	<select id="getOne" resultType="employeeUser" parameterType="map" >
+		<if test="record!=null"> 
+			select 
+			<if test="fields == null or fields == ''" >    
+				*
+			</if>
+			<if test="fields != null and fields != ''" >    
+				${fields}
+			</if>
+			from employee_user 
+			<trim prefix="where" prefixOverrides="and">
+					<if test="record.id != null and record.id != ''" > 
+					    and id =#{record.id,jdbcType=VARCHAR}
+					</if>
+					<if test="record.employeeDepartmentId != null and record.employeeDepartmentId != ''" > 
+					    and employee_department_id =#{record.employeeDepartmentId,jdbcType=VARCHAR}
+					</if>
+					<if test="record.employeeNumber != null and record.employeeNumber != ''" > 
+					    and employee_number =#{record.employeeNumber,jdbcType=VARCHAR}
+					</if>
+					<if test="record.employeeTelphone != null and record.employeeTelphone != ''" > 
+					    and employee_telphone =#{record.employeeTelphone,jdbcType=VARCHAR}
+					</if>
+					<if test="record.employeeRealName != null and record.employeeRealName != ''" > 
+					    and employee_real_name =#{record.employeeRealName,jdbcType=VARCHAR}
+					</if>
+					<if test="record.gender != null" >
+					    and gender =#{record.gender,jdbcType=TINYINT}
+					</if>    
+					<if test="record.employeeUserName != null and record.employeeUserName != ''" > 
+					    and employee_user_name =#{record.employeeUserName,jdbcType=VARCHAR}
+					</if>
+					<if test="record.employeeUserPassword != null and record.employeeUserPassword != ''" > 
+					    and employee_user_password =#{record.employeeUserPassword,jdbcType=VARCHAR}
+					</if>
+					<if test="record.consoleUserId != null and record.consoleUserId != ''" > 
+					    and console_user_id =#{record.consoleUserId,jdbcType=VARCHAR}
+					</if>
+					<if test="record.isOnline != null" >
+					    and is_online =#{record.isOnline,jdbcType=TINYINT}
+					</if>    
+					<if test="record.createDate != null" >
+					    and create_date =#{record.createDate,jdbcType=BIGINT}
+					</if>    
+					<if test="record.createTime != null" >
+					    and create_time =#{record.createTime,jdbcType=BIGINT}
+					</if>    
+			</trim>			
+		</if>	
+	</select>
+
+	<select id="getOneByParams" resultType="employeeUser" parameterType="map" >
+		<if test="whParams!=null and whParams.size()>0"> 
+			select 
+			<if test="fields == null or fields == ''" >    
+				*
+			</if>
+			<if test="fields != null and fields != ''" >    
+				${fields}
+			</if>
+			from employee_user 
+			<trim prefix="where" prefixOverrides="and">
+				<foreach collection="whParams.keys" item = "key">
+					<if test="whParams[key]!=null and whParams[key].size()>0">
+						<trim prefix="and">
+							<foreach collection="whParams[key]" item = "item" separator=" and ">
+								 ${key}=#{item}
+							</foreach>
+						</trim>
+					</if>
+				</foreach>
+			</trim>			
+		</if>	
+	</select>
+	
+	<!--查询记录总数专用语句-->
+	<select id="getCount" resultType="java.lang.Integer" parameterType="employeeUser">
+		select count(*) from employee_user
+		<trim prefix="where" prefixOverrides="and">
+			<if test="id != null and id != ''" >    
+				and id !=  #{ id,jdbcType= VARCHAR}
+			</if>
+			<if test="employeeDepartmentId != null and employeeDepartmentId != ''" >    
+				and employee_department_id =  #{ employeeDepartmentId,jdbcType= VARCHAR}
+			</if>					    
+			<if test="employeeNumber != null and employeeNumber != ''" >    
+				and employee_number =  #{ employeeNumber,jdbcType= VARCHAR}
+			</if>					    
+			<if test="employeeTelphone != null and employeeTelphone != ''" >    
+				and employee_telphone =  #{ employeeTelphone,jdbcType= VARCHAR}
+			</if>					    
+			<if test="employeeRealName != null and employeeRealName != ''" >    
+				and employee_real_name =  #{ employeeRealName,jdbcType= VARCHAR}
+			</if>					    
+			<if test="gender != null" >
+				and gender =  #{gender,jdbcType=TINYINT}
+			</if>		    
+			<if test="employeeUserName != null and employeeUserName != ''" >    
+				and employee_user_name =  #{ employeeUserName,jdbcType= VARCHAR}
+			</if>					    
+			<if test="employeeUserPassword != null and employeeUserPassword != ''" >    
+				and employee_user_password =  #{ employeeUserPassword,jdbcType= VARCHAR}
+			</if>					    
+			<if test="consoleUserId != null and consoleUserId != ''" >    
+				and console_user_id =  #{ consoleUserId,jdbcType= VARCHAR}
+			</if>					    
+			<if test="isOnline != null" >
+				and is_online =  #{isOnline,jdbcType=TINYINT}
+			</if>		    
+			<if test="createDate != null" >
+				and create_date =  #{createDate,jdbcType=BIGINT}
+			</if>		    
+			<if test="createTime != null" >
+				and create_time =  #{createTime,jdbcType=BIGINT}
+			</if>		    
+		</trim>
+	</select>
+	
+	<!--根据条件查询记录数量(ID不等于)-->
+	<select id="getCountByParams" resultType="java.lang.Integer" parameterType="map">
+		select count(*) from employee_user
+		<trim prefix="where" prefixOverrides="and">
+			<foreach collection="whParams.keys" item = "key">
+				<if test="whParams[key]!=null and whParams[key].size()>0">
+					<trim prefix="and">
+						<foreach collection="whParams[key]" item = "item" separator=" and ">
+							 ${key}=#{item}
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+		</trim>
+	</select>	
+
+	<!--可选择插入 TODO://需要ID自动及datetime-->
+	<insert id="insert" parameterType="employeeUser" >
+		insert into employee_user
+		<trim prefix="(" suffix=")" suffixOverrides="," >
+			id,
+			<if test="employeeDepartmentId != null and employeeDepartmentId != ''" > 
+				employee_department_id,
+			</if>
+			<if test="employeeNumber != null and employeeNumber != ''" > 
+				employee_number,
+			</if>
+			<if test="employeeTelphone != null and employeeTelphone != ''" > 
+				employee_telphone,
+			</if>
+			<if test="employeeRealName != null and employeeRealName != ''" > 
+				employee_real_name,
+			</if>
+			<if test="gender != null" >
+				gender,
+			</if>    
+			<if test="employeeUserName != null and employeeUserName != ''" > 
+				employee_user_name,
+			</if>
+			<if test="employeeUserPassword != null and employeeUserPassword != ''" > 
+				employee_user_password,
+			</if>
+			<if test="consoleUserId != null and consoleUserId != ''" > 
+				console_user_id,
+			</if>
+			<if test="isOnline != null" >
+				is_online,
+			</if>    
+			create_date,create_time,
+    	</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides="," >
+		    <if test="id != null and id != ''" > 
+			    #{id,jdbcType=VARCHAR},
+			</if>
+			<if test="id == null or id == ''" > 
+			    REPLACE(UUID(),'-',''),
+			</if>
+			<if test="employeeDepartmentId != null and employeeDepartmentId != ''" > 
+			    #{employeeDepartmentId,jdbcType=VARCHAR},
+			</if>
+			<if test="employeeNumber != null and employeeNumber != ''" > 
+			    #{employeeNumber,jdbcType=VARCHAR},
+			</if>
+			<if test="employeeTelphone != null and employeeTelphone != ''" > 
+			    #{employeeTelphone,jdbcType=VARCHAR},
+			</if>
+			<if test="employeeRealName != null and employeeRealName != ''" > 
+			    #{employeeRealName,jdbcType=VARCHAR},
+			</if>
+			<if test="gender != null" >
+			    #{gender,jdbcType=TINYINT},
+			</if>    
+			<if test="employeeUserName != null and employeeUserName != ''" > 
+			    #{employeeUserName,jdbcType=VARCHAR},
+			</if>
+			<if test="employeeUserPassword != null and employeeUserPassword != ''" > 
+			    #{employeeUserPassword,jdbcType=VARCHAR},
+			</if>
+			<if test="consoleUserId != null and consoleUserId != ''" > 
+			    #{consoleUserId,jdbcType=VARCHAR},
+			</if>
+			<if test="isOnline != null" >
+			    #{isOnline,jdbcType=TINYINT},
+			</if>    
+			DATE_FORMAT(NOW(),'%Y%m%d'),DATE_FORMAT(NOW(),'%H%i%S%f')/1000,		
+		</trim>
+	</insert>
+	
+	
+	
+	<!--批量插入-->
+	<insert id="insertBatch" parameterType="java.util.List">
+		insert into employee_user(id,employee_department_id,employee_number,employee_telphone,employee_real_name,gender,employee_user_name,employee_user_password,console_user_id,is_online,create_date,create_time) values 
+		<foreach collection="list" item="item" index="index" separator=",">
+			(REPLACE(UUID(),'-',''),#{item.employeeDepartmentId},#{item.employeeNumber},#{item.employeeTelphone},#{item.employeeRealName},#{item.gender},#{item.employeeUserName},#{item.employeeUserPassword},#{item.consoleUserId},#{item.isOnline},DATE_FORMAT(NOW(),'%Y%m%d'),DATE_FORMAT(NOW(),'%H%i%S%f')/1000)
+		</foreach>
+	</insert>
+	
+	<!--根据传入的参数批量插入-->
+	<insert id="insertByParams" parameterType="map">
+		<if test="vlParamLs!=null and vlParamLs.size()>0">
+			insert into employee_user(id,
+			<if test="fields!=null and fields!=''">
+				${fields},
+			</if>		
+			create_date,create_time) values 
+			<foreach collection="vlParamLs" item="item" index="index" separator="," >
+ 				(REPLACE(UUID(),'-',''), 
+ 				<foreach collection="item.values" item = "value">
+					#{value},
+ 				</foreach>
+ 				DATE_FORMAT(NOW(),'%Y%m%d'),DATE_FORMAT(NOW(),'%H%i%S%f')/1000)
+			</foreach>
+		</if>
+	</insert>
+		
+	
+	<!--根据ID更新-->
+	<update id="updateById" parameterType="employeeUser" >
+		<if test="record!=null and record.id!=null and record.id!=''">
+			update employee_user
+			<set>
+				<if test="record.employeeDepartmentId != null and record.employeeDepartmentId != ''" > 
+					employee_department_id=  #{record.employeeDepartmentId,jdbcType=VARCHAR},
+				</if>
+				<if test="record.employeeNumber != null and record.employeeNumber != ''" > 
+					employee_number=  #{record.employeeNumber,jdbcType=VARCHAR},
+				</if>
+				<if test="record.employeeTelphone != null and record.employeeTelphone != ''" > 
+					employee_telphone=  #{record.employeeTelphone,jdbcType=VARCHAR},
+				</if>
+				<if test="record.employeeRealName != null and record.employeeRealName != ''" > 
+					employee_real_name=  #{record.employeeRealName,jdbcType=VARCHAR},
+				</if>
+				<if test="record.gender != null" >
+					gender=  #{record.gender,jdbcType=TINYINT},
+				</if>    
+				<if test="record.employeeUserName != null and record.employeeUserName != ''" > 
+					employee_user_name=  #{record.employeeUserName,jdbcType=VARCHAR},
+				</if>
+				<if test="record.employeeUserPassword != null and record.employeeUserPassword != ''" > 
+					employee_user_password=  #{record.employeeUserPassword,jdbcType=VARCHAR},
+				</if>
+				<if test="record.consoleUserId != null and record.consoleUserId != ''" > 
+					console_user_id=  #{record.consoleUserId,jdbcType=VARCHAR},
+				</if>
+				<if test="record.isOnline != null" >
+					is_online=  #{record.isOnline,jdbcType=TINYINT},
+				</if>    
+			</set>
+			where id =  #{record.id,jdbcType=VARCHAR}
+		</if>  
+	</update> 
+
+	<!--根据多个条件多个值更新-->
+	<update id="updateByParams" parameterType="map">
+		<if test="record!=null">
+			update employee_user
+			<set>
+				<if test="record.employeeDepartmentId != null and record.employeeDepartmentId != ''" > 
+					employee_department_id=  #{record.employeeDepartmentId,jdbcType=VARCHAR},
+				</if>
+				<if test="record.employeeNumber != null and record.employeeNumber != ''" > 
+					employee_number=  #{record.employeeNumber,jdbcType=VARCHAR},
+				</if>
+				<if test="record.employeeTelphone != null and record.employeeTelphone != ''" > 
+					employee_telphone=  #{record.employeeTelphone,jdbcType=VARCHAR},
+				</if>
+				<if test="record.employeeRealName != null and record.employeeRealName != ''" > 
+					employee_real_name=  #{record.employeeRealName,jdbcType=VARCHAR},
+				</if>
+				<if test="record.gender != null" >
+					gender=  #{record.gender,jdbcType=TINYINT},
+				</if>    
+				<if test="record.employeeUserName != null and record.employeeUserName != ''" > 
+					employee_user_name=  #{record.employeeUserName,jdbcType=VARCHAR},
+				</if>
+				<if test="record.employeeUserPassword != null and record.employeeUserPassword != ''" > 
+					employee_user_password=  #{record.employeeUserPassword,jdbcType=VARCHAR},
+				</if>
+				<if test="record.consoleUserId != null and record.consoleUserId != ''" > 
+					console_user_id=  #{record.consoleUserId,jdbcType=VARCHAR},
+				</if>
+				<if test="record.isOnline != null" >
+					is_online=  #{record.isOnline,jdbcType=TINYINT},
+				</if>    
+			</set>
+			<if test="whParamLs!=null and whParamLs.size()>0">
+				<trim prefix="where" prefixOverrides="and">
+					<foreach collection="whParam.keys" item = "key">
+						<if test="whParamLs[key]!=null and whParamLs[key].size()>0">
+							<trim prefix="and">
+								<foreach collection="whParamLs[key]" item = "item" separator=" and ">
+									 ${key}=#{item}
+								</foreach>
+							</trim>
+						</if>
+					</foreach>
+				</trim>
+			</if>
+		</if>
+	</update> 
+	
+    <!--删除全部-->
+	<delete id="deleteAll">
+		delete from employee_user
+	</delete>
+	
+	<!--根据条件删除-->
+	<delete id="delete" parameterType="employeeUser">
+		<if test="record!=null">
+			delete from employee_user 
+			<trim prefix="where" prefixOverrides="and">
+				<if test="record.id != null and record.id != ''" >    
+					and id =  #{record.id,jdbcType=VARCHAR}
+				</if>
+				<if test="record.employeeDepartmentId != null and record.employeeDepartmentId != ''" >    
+					and employee_department_id =  #{record.employeeDepartmentId,jdbcType=VARCHAR}
+				</if>
+				<if test="record.employeeNumber != null and record.employeeNumber != ''" >    
+					and employee_number =  #{record.employeeNumber,jdbcType=VARCHAR}
+				</if>
+				<if test="record.employeeTelphone != null and record.employeeTelphone != ''" >    
+					and employee_telphone =  #{record.employeeTelphone,jdbcType=VARCHAR}
+				</if>
+				<if test="record.employeeRealName != null and record.employeeRealName != ''" >    
+					and employee_real_name =  #{record.employeeRealName,jdbcType=VARCHAR}
+				</if>
+			    <if test="record.gender != null" >
+					and gender =  #{record.gender,jdbcType=TINYINT}
+				</if>    
+				<if test="record.employeeUserName != null and record.employeeUserName != ''" >    
+					and employee_user_name =  #{record.employeeUserName,jdbcType=VARCHAR}
+				</if>
+				<if test="record.employeeUserPassword != null and record.employeeUserPassword != ''" >    
+					and employee_user_password =  #{record.employeeUserPassword,jdbcType=VARCHAR}
+				</if>
+				<if test="record.consoleUserId != null and record.consoleUserId != ''" >    
+					and console_user_id =  #{record.consoleUserId,jdbcType=VARCHAR}
+				</if>
+			    <if test="record.isOnline != null" >
+					and is_online =  #{record.isOnline,jdbcType=TINYINT}
+				</if>    
+			    <if test="record.createDate != null" >
+					and create_date =  #{record.createDate,jdbcType=BIGINT}
+				</if>    
+			    <if test="record.createTime != null" >
+					and create_time =  #{record.createTime,jdbcType=BIGINT}
+				</if>    
+			</trim>
+		</if>	
+	</delete>
+	
+	<!--根据多个字段多个值删除-->
+	<delete id="deleteByParams" parameterType="map" >
+		<if test="whParams!=null and whParams.size()>0">
+			delete from employee_user 
+			<trim prefix="where" prefixOverrides="and">
+				<foreach collection="whParams.keys" item = "key">
+					<if test="whParams[key]!=null and whParams[key].size()>0">
+						<trim prefix="and">
+							<foreach collection="whParams[key]" item = "item" open="(" separator=" or " close=")">
+								 ${key}=#{item}
+							</foreach>
+						</trim>
+					</if>
+				</foreach>
+			</trim>
+		</if>
+	</delete>
+	
+	<!--根据主键删除-->
+	<delete id="deleteById" parameterType="java.lang.String" >
+		<if test="id!= null and id!= ''">
+			delete from employee_user where id =  #{id,jdbcType=VARCHAR}
+		</if>
+	</delete>
+
+	<!--根据多个ID批量删除(普通结构)-->
+	<delete id = "deleteByIds" parameterType = "map">
+		<if test="idLs != null and idLs.size()>0">
+			delete from employee_user 
+			<trim prefix="where" prefixOverrides="and">
+				and id in 
+				<foreach collection="idLs" item = "id" open="(" separator="," close=")">
+					 #{id,jdbcType=VARCHAR}
+				</foreach>
+			</trim>
+		</if>
+	</delete>
+</mapper>
+

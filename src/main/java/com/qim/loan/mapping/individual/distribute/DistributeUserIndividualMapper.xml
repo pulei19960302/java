@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.qim.loan.dao.distribute.DistributeUserDao" >
+  	<resultMap id="IndividualResultMap" type="com.qim.loan.entity.distribute.DistributeUser">
+    	<id column="id" property="id" jdbcType="VARCHAR" />	
+    	<result column="create_date" property="createDate" jdbcType="BIGINT" />
+    	<result column="create_time" property="createTime" jdbcType="BIGINT" />
+    	<result column="distribute_user_name" property="distributeUserName" jdbcType="VARCHAR" />
+    	<result column="distribute_user_password" property="distributeUserPassword" jdbcType="VARCHAR" />
+    	<result column="real_name" property="realName" jdbcType="VARCHAR" />
+    	<result column="gender" property="gender" jdbcType="TINYINT" />
+    	<result column="distribute_user_telphone" property="distributeUserTelphone" jdbcType="VARCHAR" />
+    	<result column="distribute_user_goldcoin_number" property="distributeUserGoldcoinNumber" jdbcType="BIGINT" />
+  	</resultMap>
+	<!--请在以下空白处编写新的SQL(仅限Java开发人员使用)-->
+	
+	
+	
+ 	
+</mapper>

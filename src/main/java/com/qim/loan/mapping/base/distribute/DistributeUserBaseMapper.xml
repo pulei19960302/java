@@ -1,0 +1,722 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.qim.loan.dao.distribute.DistributeUserDao" >
+	<resultMap id="ResultMap" type="com.qim.loan.entity.distribute.DistributeUser">
+    	<id column="id" property="id" jdbcType="VARCHAR" />	
+    	<result column="create_date" property="createDate" jdbcType="BIGINT" />
+    	<result column="create_time" property="createTime" jdbcType="BIGINT" />
+    	<result column="distribute_user_name" property="distributeUserName" jdbcType="VARCHAR" />
+    	<result column="distribute_user_password" property="distributeUserPassword" jdbcType="VARCHAR" />
+    	<result column="real_name" property="realName" jdbcType="VARCHAR" />
+    	<result column="gender" property="gender" jdbcType="TINYINT" />
+    	<result column="distribute_user_telphone" property="distributeUserTelphone" jdbcType="VARCHAR" />
+    	<result column="distribute_user_goldcoin_number" property="distributeUserGoldcoinNumber" jdbcType="BIGINT" />
+	    <result column="is_online" property="isOnline" jdbcType="BIGINT"/>
+	</resultMap>
+	
+	 	
+
+
+	
+	<!--根据条件获取列表页-->
+
+
+	<!--根据条件分页查询-->
+  	<select id="getListRelative" resultType="map" parameterType="map">
+		select 
+		<if test="fieldLs == null or fieldLs.size()==0">
+			distributeUser.*
+		</if>
+		<if test="fieldLs != null and fieldLs.size()>0" >   
+			<foreach collection="fieldLs" item = "field" separator=",">
+				 distributeUser.${field}
+			</foreach>			
+		</if>
+		<if test="fieldLrs != null and fieldLrs.size()>0" >   
+			,
+			<foreach collection="fieldLrs" item = "field" separator=",">
+				 ${field}
+			</foreach>			
+		</if>
+		from distribute_user distributeUser
+		<trim prefix="where" prefixOverrides="and">
+			<if test="record.id != null and record.id != ''" >    
+				and distributeUser.id like  '%${record.id}%'
+			</if>
+			<if test="record.createDate != null" >
+				and distributeUser.create_date =  #{record.createDate,jdbcType=BIGINT}
+			</if> 
+			<if test="record.createTime != null" >
+				and distributeUser.create_time =  #{record.createTime,jdbcType=BIGINT}
+			</if> 
+			<if test="record.distributeUserName != null and record.distributeUserName != ''" >    
+				and distributeUser.distribute_user_name like  '%${record.distributeUserName}%'
+			</if>
+			<if test="record.distributeUserPassword != null and record.distributeUserPassword != ''" >    
+				and distributeUser.distribute_user_password like  '%${record.distributeUserPassword}%'
+			</if>
+			<if test="record.realName != null and record.realName != ''" >    
+				and distributeUser.real_name like  '%${record.realName}%'
+			</if>
+			<if test="record.gender != null" >
+				and distributeUser.gender =  #{record.gender,jdbcType=TINYINT}
+			</if> 
+			<if test="record.distributeUserTelphone != null and record.distributeUserTelphone != ''" >    
+				and distributeUser.distribute_user_telphone like  '%${record.distributeUserTelphone}%'
+			</if>
+			<if test="record.distributeUserGoldcoinNumber != null" >
+				and distributeUser.distribute_user_goldcoin_number =  #{record.distributeUserGoldcoinNumber,jdbcType=BIGINT}
+			</if> 
+			<if test="record.isOnline != null" >
+				and distributeUser.isOnline =  #{record.isOnline,jdbcType=BIGINT}
+			</if> 
+		</trim>
+		<if test="groupByLs != null and groupByLs.size()>0" >
+			<trim prefix="group by " prefixOverrides=",">
+				<foreach collection="groupByLs" item = "groupBy" separator=",">
+					 distributeUser.${groupBy}
+				</foreach>
+			</trim>
+		</if>
+		<if test="orderByLs != null and orderByLs.size()>0" >
+			<trim prefix="order by " prefixOverrides=",">
+				<foreach collection="orderByLs" item = "orderBy" separator=",">
+					 distributeUser.${orderBy}
+				</foreach>
+			</trim>
+		</if>
+		<if test="orderByLs == null or orderByLs.size ==0">
+			order by distributeUser.create_date desc,distributeUser.create_time desc
+		</if>		
+	</select>
+	
+	<!--根据条件分页查询-->
+  	<select id="getListRelativeByParams" resultType="map" parameterType="map">
+		select 
+		<if test="fieldLs == null or fieldLs.size()==0">
+			distributeUser.*
+		</if>
+		<if test="fieldLs != null and fieldLs.size()>0" >   
+			<foreach collection="fieldLs" item = "field" separator=",">
+				 distributeUser.${field}
+			</foreach>			
+		</if>
+		<if test="fieldLrs != null and fieldLrs.size()>0" >   
+			,
+			<foreach collection="fieldLrs" item = "field" separator=",">
+				 ${field}
+			</foreach>			
+		</if>		
+		from distribute_user distributeUser
+		<trim prefix="where" prefixOverrides="and">
+			<foreach collection="whParams.keys" item = "key">
+				<if test="whParams[key]!=null and whParams[key].size()>0">
+					<trim prefix="and">
+						<foreach collection="whParams[key]" item = "item" open="(" separator=" or " close=")">
+							 distributeUser.${key}=#{item}
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+		</trim>
+		<if test="groupByLs != null and groupByLs.size()>0" >
+			<trim prefix="group by " prefixOverrides=",">
+				<foreach collection="groupByLs" item = "groupBy" separator=",">
+					 distributeUser.${groupBy}
+				</foreach>
+			</trim>
+		</if>		
+		<if test="orderByLs != null and orderByLs.size()>0" >
+			<trim prefix="order by " prefixOverrides=",">
+				<foreach collection="orderByLs" item = "orderBy" separator=",">
+					 distributeUser.${orderBy}
+				</foreach>
+			</trim>
+		</if>
+		<if test="orderByLs == null or orderByLs.size ==0">
+			order by distributeUser.create_date desc,distributeUser.create_time desc
+		</if>		
+	</select>	
+	
+
+		
+	<!--根据自己条件查询列表-->
+  	<select id="getList" resultType="distributeUser" parameterType="map">
+		select 
+		<if test="fields == null or fields == ''" >    
+			*
+		</if>
+		<if test="fields != null and fields != ''" >    
+			${fields}
+		</if>
+		from distribute_user
+		<if test="record!=null">
+			<trim prefix="where" prefixOverrides="and">
+				<if test="record.id != null and record.id != ''" >    
+					and id=#{record.id,jdbcType=VARCHAR}
+				</if>
+				<if test="record.createDate != null" >
+					and create_date =  #{record.createDate,jdbcType=BIGINT}
+				</if>
+				<if test="record.createTime != null" >
+					and create_time =  #{record.createTime,jdbcType=BIGINT}
+				</if>
+				<if test="record.distributeUserName != null and record.distributeUserName != ''" >    
+					and distribute_user_name=#{record.distributeUserName,jdbcType=VARCHAR}
+				</if>
+				<if test="record.distributeUserPassword != null and record.distributeUserPassword != ''" >    
+					and distribute_user_password=#{record.distributeUserPassword,jdbcType=VARCHAR}
+				</if>
+				<if test="record.realName != null and record.realName != ''" >    
+					and real_name=#{record.realName,jdbcType=VARCHAR}
+				</if>
+				<if test="record.gender != null" >
+					and gender =  #{record.gender,jdbcType=TINYINT}
+				</if>
+				<if test="record.distributeUserTelphone != null and record.distributeUserTelphone != ''" >    
+					and distribute_user_telphone=#{record.distributeUserTelphone,jdbcType=VARCHAR}
+				</if>
+				<if test="record.distributeUserGoldcoinNumber != null" >
+					and distribute_user_goldcoin_number =  #{record.distributeUserGoldcoinNumber,jdbcType=BIGINT}
+				</if>
+				<if test="record.isOnline != null" >
+					and is_online =  #{record.isOnline,jdbcType=BIGINT}
+				</if>
+			</trim>
+		</if>
+		<if test="groupBys != null and groupBys != ''" >
+			group by ${groupBys}
+		</if>
+		<if test="orderBys != null and orderBys != ''" >
+			 order by ${orderBys}
+		</if>
+		<if test="orderBys == null or orderBys == ''">
+			order by create_date desc,create_time desc
+		</if>	
+	</select>
+	
+	<!--根据自己条件查询列表-->
+  	<select id="getListByParams" resultType="distributeUser" parameterType="map">
+		select 
+		<if test="fields == null or fields == ''" >    
+			*
+		</if>
+		<if test="fields != null and fields != ''" >    
+			${fields}
+		</if>
+		from distribute_user
+		<if test="whParams != null and whParams.size()>0" >
+			<trim prefix="where" prefixOverrides="and">
+				<foreach collection="whParams.keys" item = "key">
+					<if test="whParams[key]!=null and whParams[key].size()>0">
+						<trim prefix="and">
+							<foreach collection="whParams[key]" item = "item" open="(" separator=" or " close=")">
+								 ${key}=#{item}
+							</foreach>
+						</trim>
+					</if>
+				</foreach>	
+			</trim>
+		</if>
+		<if test="groupBys != null and groupBys != ''" >
+			group by ${groupBys}
+		</if>
+		<if test="orderBys != null and orderBys != ''" >
+			 order by ${orderBys}
+		</if>
+		<if test="orderBys == null or orderBys == ''">
+			order by create_date desc,create_time desc
+		</if>	
+	</select>		
+	
+	<select id="getOneRelativeByParams" resultType="map" parameterType="map">	
+		<if test="whParams!=null and whParams.size()>0">
+			select 
+			<if test="fieldLs == null or fieldLs.size()==0">
+				distributeUser.*
+			</if>
+			<if test="fieldLs != null and fieldLs.size()>0" >   
+				<foreach collection="fieldLs" item = "field" separator=",">
+					 distributeUser.${field}
+				</foreach>
+			</if>
+			<if test="fieldLrs != null and fieldLrs.size()>0" >   
+				,
+				<foreach collection="fieldLrs" item = "field" separator=",">
+					 ${field}
+				</foreach>
+			</if>			
+			from distribute_user distributeUser
+			<trim prefix="where" prefixOverrides="and">
+				<foreach collection="whParams.keys" item = "key">
+					<if test="whParams[key]!=null and whParams[key].size()>0">
+						<trim prefix="and">
+							<foreach collection="whParams[key]" item = "item" separator=" and ">
+								 distributeUser.${key}=#{item}
+							</foreach>
+						</trim>
+					</if>
+				</foreach>
+			</trim>	
+		</if>	
+	</select>
+
+
+	<select id="getOneRelative" resultType="map" parameterType="map">	
+		<if test="record!=null">
+			select 
+			<if test="fieldLs == null or fieldLs.size()==0">
+				distributeUser.*
+			</if>
+			<if test="fieldLs != null and fieldLs.size()>0" >   
+				<foreach collection="fieldLs" item = "field" separator=",">
+					 distributeUser.${field}
+				</foreach>
+			</if>
+			<if test="fieldLrs != null and fieldLrs.size()>0" >   
+				,
+				<foreach collection="fieldLrs" item = "field" separator=",">
+					 ${field}
+				</foreach>
+			</if>			
+			from distribute_user distributeUser
+			<trim prefix="where" prefixOverrides="and">
+				<if test="record.id != null and record.id != ''" >    
+					and distributeUser.id=#{record.id,jdbcType=VARCHAR}
+				</if>
+				<if test="record.createDate != null" >
+					and distributeUser.create_date =  #{record.createDate,jdbcType=BIGINT}
+				</if>
+				<if test="record.createTime != null" >
+					and distributeUser.create_time =  #{record.createTime,jdbcType=BIGINT}
+				</if>
+				<if test="record.distributeUserName != null and record.distributeUserName != ''" >    
+					and distributeUser.distribute_user_name=#{record.distributeUserName,jdbcType=VARCHAR}
+				</if>
+				<if test="record.distributeUserPassword != null and record.distributeUserPassword != ''" >    
+					and distributeUser.distribute_user_password=#{record.distributeUserPassword,jdbcType=VARCHAR}
+				</if>
+				<if test="record.realName != null and record.realName != ''" >    
+					and distributeUser.real_name=#{record.realName,jdbcType=VARCHAR}
+				</if>
+				<if test="record.gender != null" >
+					and distributeUser.gender =  #{record.gender,jdbcType=TINYINT}
+				</if>
+				<if test="record.distributeUserTelphone != null and record.distributeUserTelphone != ''" >    
+					and distributeUser.distribute_user_telphone=#{record.distributeUserTelphone,jdbcType=VARCHAR}
+				</if>
+				<if test="record.distributeUserGoldcoinNumber != null" >
+					and distributeUser.distribute_user_goldcoin_number =  #{record.distributeUserGoldcoinNumber,jdbcType=BIGINT}
+				</if>
+				<if test="record.isOnline != null" >
+					and distributeUser.is_online =  #{record.isOnline,jdbcType=BIGINT}
+				</if>
+			</trim>
+		</if>	
+	</select>
+
+	
+	<select id="getOneRelativeById" resultType="map" parameterType="java.lang.String">	
+		<if test="id != null and id != ''" >
+			select 
+			<if test="fieldLs == null or fieldLs.size()==0">
+				distributeUser.*
+			</if>
+			<if test="fieldLs != null and fieldLs.size()>0" >   
+				<foreach collection="fieldLs" item = "field" separator=",">
+					 distributeUser.${field}
+				</foreach>			
+			</if>
+			<if test="fieldLrs != null and fieldLrs.size()>0" >   
+				,
+				<foreach collection="fieldLrs" item = "field" separator=",">
+					 ${field}
+				</foreach>			
+			</if>			
+			from distribute_user distributeUser
+			where distributeUser.id =  #{id,jdbcType=VARCHAR}
+		</if>	
+	</select>
+	
+	<!--根据主键查询本表结果-->
+	<select id="getOneById" resultType="distributeUser" parameterType="map" >
+		<if test="id != null and id != ''" > 
+			select 
+			<if test="fields == null or fields == ''" >    
+				*
+			</if>
+			<if test="fields != null and fields != ''" >    
+				${fields}
+			</if>
+			from distribute_user where id =  #{id,jdbcType=VARCHAR}
+		</if> 
+	</select>
+
+	<select id="getOne" resultType="distributeUser" parameterType="map" >
+		<if test="record!=null"> 
+			select 
+			<if test="fields == null or fields == ''" >    
+				*
+			</if>
+			<if test="fields != null and fields != ''" >    
+				${fields}
+			</if>
+			from distribute_user 
+			<trim prefix="where" prefixOverrides="and">
+					<if test="record.id != null and record.id != ''" > 
+					    and id =#{record.id,jdbcType=VARCHAR}
+					</if>
+					<if test="record.createDate != null" >
+					    and create_date =#{record.createDate,jdbcType=BIGINT}
+					</if>    
+					<if test="record.createTime != null" >
+					    and create_time =#{record.createTime,jdbcType=BIGINT}
+					</if>    
+					<if test="record.distributeUserName != null and record.distributeUserName != ''" > 
+					    and distribute_user_name =#{record.distributeUserName,jdbcType=VARCHAR}
+					</if>
+					<if test="record.distributeUserPassword != null and record.distributeUserPassword != ''" > 
+					    and distribute_user_password =#{record.distributeUserPassword,jdbcType=VARCHAR}
+					</if>
+					<if test="record.realName != null and record.realName != ''" > 
+					    and real_name =#{record.realName,jdbcType=VARCHAR}
+					</if>
+					<if test="record.gender != null" >
+					    and gender =#{record.gender,jdbcType=TINYINT}
+					</if>    
+					<if test="record.distributeUserTelphone != null and record.distributeUserTelphone != ''" > 
+					    and distribute_user_telphone =#{record.distributeUserTelphone,jdbcType=VARCHAR}
+					</if>
+					<if test="record.distributeUserGoldcoinNumber != null" >
+					    and distribute_user_goldcoin_number =#{record.distributeUserGoldcoinNumber,jdbcType=BIGINT}
+					</if>    
+					<!-- <if test="record.isOnline != null" >
+					    and is_online =#{record.isOnline,jdbcType=BIGINT}
+					</if>  -->   
+			</trim>			
+		</if>	
+	</select>
+
+	<select id="getOneByParams" resultType="distributeUser" parameterType="map" >
+		<if test="whParams!=null and whParams.size()>0"> 
+			select 
+			<if test="fields == null or fields == ''" >    
+				*
+			</if>
+			<if test="fields != null and fields != ''" >    
+				${fields}
+			</if>
+			from distribute_user 
+			<trim prefix="where" prefixOverrides="and">
+				<foreach collection="whParams.keys" item = "key">
+					<if test="whParams[key]!=null and whParams[key].size()>0">
+						<trim prefix="and">
+							<foreach collection="whParams[key]" item = "item" separator=" and ">
+								 ${key}=#{item}
+							</foreach>
+						</trim>
+					</if>
+				</foreach>
+			</trim>			
+		</if>	
+	</select>
+	
+	<!--查询记录总数专用语句-->
+	<select id="getCount" resultType="java.lang.Integer" parameterType="distributeUser">
+		select count(*) from distribute_user
+		<trim prefix="where" prefixOverrides="and">
+			<if test="id != null and id != ''" >    
+				and id !=  #{ id,jdbcType= VARCHAR}
+			</if>
+			<if test="createDate != null" >
+				and create_date =  #{createDate,jdbcType=BIGINT}
+			</if>		    
+			<if test="createTime != null" >
+				and create_time =  #{createTime,jdbcType=BIGINT}
+			</if>		    
+			<if test="distributeUserName != null and distributeUserName != ''" >    
+				and distribute_user_name =  #{ distributeUserName,jdbcType= VARCHAR}
+			</if>					    
+			<if test="distributeUserPassword != null and distributeUserPassword != ''" >    
+				and distribute_user_password =  #{ distributeUserPassword,jdbcType= VARCHAR}
+			</if>					    
+			<if test="realName != null and realName != ''" >    
+				and real_name =  #{ realName,jdbcType= VARCHAR}
+			</if>					    
+			<if test="gender != null" >
+				and gender =  #{gender,jdbcType=TINYINT}
+			</if>		    
+			<if test="distributeUserTelphone != null and distributeUserTelphone != ''" >    
+				and distribute_user_telphone =  #{ distributeUserTelphone,jdbcType= VARCHAR}
+			</if>					    
+			<if test="distributeUserGoldcoinNumber != null" >
+				and distribute_user_goldcoin_number =  #{distributeUserGoldcoinNumber,jdbcType=BIGINT}
+			</if>		    
+			<if test="isOnline != null" >
+				and is_online =  #{isOnline,jdbcType=BIGINT}
+			</if>		    
+		</trim>
+	</select>
+	
+	<!--根据条件查询记录数量(ID不等于)-->
+	<select id="getCountByParams" resultType="java.lang.Integer" parameterType="map">
+		select count(*) from distribute_user
+		<trim prefix="where" prefixOverrides="and">
+			<foreach collection="whParams.keys" item = "key">
+				<if test="whParams[key]!=null and whParams[key].size()>0">
+					<trim prefix="and">
+						<foreach collection="whParams[key]" item = "item" separator=" and ">
+							 ${key}=#{item}
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+		</trim>
+	</select>	
+
+	<!--可选择插入 TODO://需要ID自动及datetime-->
+	<insert id="insert" parameterType="distributeUser" >
+		insert into distribute_user
+		<trim prefix="(" suffix=")" suffixOverrides="," >
+			id,
+			<if test="distributeUserName != null and distributeUserName != ''" > 
+				distribute_user_name,
+			</if>
+			<if test="distributeUserPassword != null and distributeUserPassword != ''" > 
+				distribute_user_password,
+			</if>
+			<if test="realName != null and realName != ''" > 
+				real_name,
+			</if>
+			<if test="gender != null" >
+				gender,
+			</if>    
+			<if test="distributeUserTelphone != null and distributeUserTelphone != ''" > 
+				distribute_user_telphone,
+			</if>
+			<if test="distributeUserGoldcoinNumber != null" >
+				distribute_user_goldcoin_number,
+			</if>    
+			<if test="isOnline != null" >
+				is_online,
+			</if>    
+			create_date,create_time,
+    	</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides="," >
+		    <if test="id != null and id != ''" > 
+			    #{id,jdbcType=VARCHAR},
+			</if>
+			<if test="id == null or id == ''" > 
+			    REPLACE(UUID(),'-',''),
+			</if>
+			<if test="distributeUserName != null and distributeUserName != ''" > 
+			    #{distributeUserName,jdbcType=VARCHAR},
+			</if>
+			<if test="distributeUserPassword != null and distributeUserPassword != ''" > 
+			    #{distributeUserPassword,jdbcType=VARCHAR},
+			</if>
+			<if test="realName != null and realName != ''" > 
+			    #{realName,jdbcType=VARCHAR},
+			</if>
+			<if test="gender != null" >
+			    #{gender,jdbcType=TINYINT},
+			</if>    
+			<if test="distributeUserTelphone != null and distributeUserTelphone != ''" > 
+			    #{distributeUserTelphone,jdbcType=VARCHAR},
+			</if>
+			<if test="distributeUserGoldcoinNumber != null" >
+			    #{distributeUserGoldcoinNumber,jdbcType=BIGINT},
+			</if>    
+			<if test="isOnline != null" >
+			    #{isOnline,jdbcType=BIGINT},
+			</if>    
+			DATE_FORMAT(NOW(),'%Y%m%d'),DATE_FORMAT(NOW(),'%H%i%S%f')/1000,		
+		</trim>
+	</insert>
+	
+	
+	
+	<!--批量插入-->
+	<insert id="insertBatch" parameterType="java.util.List">
+		insert into distribute_user(id,create_date,create_time,distribute_user_name,distribute_user_password,real_name,gender,distribute_user_telphone,distribute_user_goldcoin_number,is_online) values 
+		<foreach collection="list" item="item" index="index" separator=",">
+			(REPLACE(UUID(),'-',''),DATE_FORMAT(NOW(),'%Y%m%d'),DATE_FORMAT(NOW(),'%H%i%S%f')/1000,#{item.distributeUserName},#{item.distributeUserPassword},#{item.realName},#{item.gender},#{item.distributeUserTelphone},#{item.distributeUserGoldcoinNumber},#{item.isOnline})
+		</foreach>
+	</insert>
+	
+	<!--根据传入的参数批量插入-->
+	<insert id="insertByParams" parameterType="map">
+		<if test="vlParamLs!=null and vlParamLs.size()>0">
+			insert into distribute_user(id,
+			<if test="fields!=null and fields!=''">
+				${fields},
+			</if>		
+			create_date,create_time) values 
+			<foreach collection="vlParamLs" item="item" index="index" separator="," >
+ 				(REPLACE(UUID(),'-',''), 
+ 				<foreach collection="item.values" item = "value">
+					#{value},
+ 				</foreach>
+ 				DATE_FORMAT(NOW(),'%Y%m%d'),DATE_FORMAT(NOW(),'%H%i%S%f')/1000)
+			</foreach>
+		</if>
+	</insert>
+		
+	
+	<!--根据ID更新-->
+	<update id="updateById" parameterType="distributeUser" >
+		<if test="record!=null and record.id!=null and record.id!=''">
+			update distribute_user
+			<set>
+				<if test="record.distributeUserName != null and record.distributeUserName != ''" > 
+					distribute_user_name=  #{record.distributeUserName,jdbcType=VARCHAR},
+				</if>
+				<if test="record.distributeUserPassword != null and record.distributeUserPassword != ''" > 
+					distribute_user_password=  #{record.distributeUserPassword,jdbcType=VARCHAR},
+				</if>
+				<if test="record.realName != null and record.realName != ''" > 
+					real_name=  #{record.realName,jdbcType=VARCHAR},
+				</if>
+				<if test="record.gender != null" >
+					gender=  #{record.gender,jdbcType=TINYINT},
+				</if>    
+				<if test="record.distributeUserTelphone != null and record.distributeUserTelphone != ''" > 
+					distribute_user_telphone=  #{record.distributeUserTelphone,jdbcType=VARCHAR},
+				</if>
+				<if test="record.distributeUserGoldcoinNumber != null" >
+					distribute_user_goldcoin_number=  #{record.distributeUserGoldcoinNumber,jdbcType=BIGINT},
+				</if>    
+				<if test="record.isOnline != null" >
+					is_online=  #{record.isOnline,jdbcType=BIGINT},
+				</if>    
+			</set>
+			where id =  #{record.id,jdbcType=VARCHAR}
+		</if>  
+	</update> 
+
+	<!--根据多个条件多个值更新-->
+	<update id="updateByParams" parameterType="map">
+		<if test="record!=null">
+			update distribute_user
+			<set>
+				<if test="record.distributeUserName != null and record.distributeUserName != ''" > 
+					distribute_user_name=  #{record.distributeUserName,jdbcType=VARCHAR},
+				</if>
+				<if test="record.distributeUserPassword != null and record.distributeUserPassword != ''" > 
+					distribute_user_password=  #{record.distributeUserPassword,jdbcType=VARCHAR},
+				</if>
+				<if test="record.realName != null and record.realName != ''" > 
+					real_name=  #{record.realName,jdbcType=VARCHAR},
+				</if>
+				<if test="record.gender != null" >
+					gender=  #{record.gender,jdbcType=TINYINT},
+				</if>    
+				<if test="record.distributeUserTelphone != null and record.distributeUserTelphone != ''" > 
+					distribute_user_telphone=  #{record.distributeUserTelphone,jdbcType=VARCHAR},
+				</if>
+				<if test="record.distributeUserGoldcoinNumber != null" >
+					distribute_user_goldcoin_number=  #{record.distributeUserGoldcoinNumber,jdbcType=BIGINT},
+				</if>    
+				<if test="record.isOnline != null" >
+					is_online=  #{record.isOnline,jdbcType=BIGINT},
+				</if>    
+			</set>
+			<if test="whParamLs!=null and whParamLs.size()>0">
+				<trim prefix="where" prefixOverrides="and">
+					<foreach collection="whParam.keys" item = "key">
+						<if test="whParamLs[key]!=null and whParamLs[key].size()>0">
+							<trim prefix="and">
+								<foreach collection="whParamLs[key]" item = "item" separator=" and ">
+									 ${key}=#{item}
+								</foreach>
+							</trim>
+						</if>
+					</foreach>
+				</trim>
+			</if>
+		</if>
+	</update> 
+	
+    <!--删除全部-->
+	<delete id="deleteAll">
+		delete from distribute_user
+	</delete>
+	
+	<!--根据条件删除-->
+	<delete id="delete" parameterType="distributeUser">
+		<if test="record!=null">
+			delete from distribute_user 
+			<trim prefix="where" prefixOverrides="and">
+				<if test="record.id != null and record.id != ''" >    
+					and id =  #{record.id,jdbcType=VARCHAR}
+				</if>
+			    <if test="record.createDate != null" >
+					and create_date =  #{record.createDate,jdbcType=BIGINT}
+				</if>    
+			    <if test="record.createTime != null" >
+					and create_time =  #{record.createTime,jdbcType=BIGINT}
+				</if>    
+				<if test="record.distributeUserName != null and record.distributeUserName != ''" >    
+					and distribute_user_name =  #{record.distributeUserName,jdbcType=VARCHAR}
+				</if>
+				<if test="record.distributeUserPassword != null and record.distributeUserPassword != ''" >    
+					and distribute_user_password =  #{record.distributeUserPassword,jdbcType=VARCHAR}
+				</if>
+				<if test="record.realName != null and record.realName != ''" >    
+					and real_name =  #{record.realName,jdbcType=VARCHAR}
+				</if>
+			    <if test="record.gender != null" >
+					and gender =  #{record.gender,jdbcType=TINYINT}
+				</if>    
+				<if test="record.distributeUserTelphone != null and record.distributeUserTelphone != ''" >    
+					and distribute_user_telphone =  #{record.distributeUserTelphone,jdbcType=VARCHAR}
+				</if>
+			    <if test="record.distributeUserGoldcoinNumber != null" >
+					and distribute_user_goldcoin_number =  #{record.distributeUserGoldcoinNumber,jdbcType=BIGINT}
+				</if>    
+			    <if test="record.isOnline != null" >
+					and is_online =  #{record.isOnline,jdbcType=BIGINT}
+				</if>    
+			</trim>
+		</if>	
+	</delete>
+	
+	<!--根据多个字段多个值删除-->
+	<delete id="deleteByParams" parameterType="map" >
+		<if test="whParams!=null and whParams.size()>0">
+			delete from distribute_user 
+			<trim prefix="where" prefixOverrides="and">
+				<foreach collection="whParams.keys" item = "key">
+					<if test="whParams[key]!=null and whParams[key].size()>0">
+						<trim prefix="and">
+							<foreach collection="whParams[key]" item = "item" open="(" separator=" or " close=")">
+								 ${key}=#{item}
+							</foreach>
+						</trim>
+					</if>
+				</foreach>
+			</trim>
+		</if>
+	</delete>
+	
+	<!--根据主键删除-->
+	<delete id="deleteById" parameterType="java.lang.String" >
+		<if test="id!= null and id!= ''">
+			delete from distribute_user where id =  #{id,jdbcType=VARCHAR}
+		</if>
+	</delete>
+
+	<!--根据多个ID批量删除(普通结构)-->
+	<delete id = "deleteByIds" parameterType = "map">
+		<if test="idLs != null and idLs.size()>0">
+			delete from distribute_user 
+			<trim prefix="where" prefixOverrides="and">
+				and id in 
+				<foreach collection="idLs" item = "id" open="(" separator="," close=")">
+					 #{id,jdbcType=VARCHAR}
+				</foreach>
+			</trim>
+		</if>
+	</delete>
+</mapper>
+

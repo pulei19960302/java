@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.qim.loan.dao.console.ConsoleUserLoginRecordDao" >
+  	<resultMap id="IndividualResultMap" type="com.qim.loan.entity.console.ConsoleUserLoginRecord">
+    	<id column="id" property="id" jdbcType="VARCHAR" />	
+    	<result column="console_user_id" property="consoleUserId" jdbcType="VARCHAR" />
+    	<result column="ip_address" property="ipAddress" jdbcType="VARCHAR" />
+    	<result column="os_version" property="osVersion" jdbcType="VARCHAR" />
+    	<result column="browse_version" property="browseVersion" jdbcType="VARCHAR" />
+    	<result column="create_date" property="createDate" jdbcType="BIGINT" />
+    	<result column="create_time" property="createTime" jdbcType="BIGINT" />
+  	</resultMap>
+	<!--请在以下空白处编写新的SQL(仅限Java开发人员使用)-->
+ 	
+</mapper>

@@ -1,0 +1,2136 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.qim.loan.dao.client.ClientDataDao" >
+	<resultMap id="ResultMap" type="com.qim.loan.entity.client.ClientData">
+    	<id column="id" property="id" jdbcType="VARCHAR" />	
+    	<result column="telphone_number" property="telphoneNumber" jdbcType="VARCHAR" />
+    	<result column="channel_id" property="channelId" jdbcType="VARCHAR" />
+    	<result column="channel_user_id" property="channelUserId" jdbcType="VARCHAR" />
+    	<result column="create_date" property="createDate" jdbcType="BIGINT" />
+    	<result column="create_time" property="createTime" jdbcType="BIGINT" />
+    	<result column="console_user_id" property="consoleUserId" jdbcType="VARCHAR" />
+    	<result column="distribute_date" property="distributeDate" jdbcType="BIGINT" />
+    	<result column="distribute_time" property="distributeTime" jdbcType="BIGINT" />
+    	<result column="employee_one_user_id" property="employeeOneUserId" jdbcType="VARCHAR" />
+    	<result column="is_dial" property="isDial" jdbcType="TINYINT" />
+    	<result column="is_purpose" property="isPurpose" jdbcType="TINYINT" />
+    	<result column="purpose_descript" property="purposeDescript" jdbcType="VARCHAR" />
+    	<result column="dial_date" property="dialDate" jdbcType="BIGINT" />
+    	<result column="dial_time" property="dialTime" jdbcType="BIGINT" />
+    	<result column="real_name" property="realName" jdbcType="VARCHAR" />
+    	<result column="is_real" property="isReal" jdbcType="TINYINT" />
+    	<result column="service_password" property="servicePassword" jdbcType="VARCHAR" />
+    	<result column="phone_use_year" property="phoneUseYear" jdbcType="VARCHAR" />
+    	<result column="identification_card_number" property="identificationCardNumber" jdbcType="VARCHAR" />
+    	<result column="seseam_score" property="seseamScore" jdbcType="BIGINT" />
+    	<result column="naughty_score" property="naughtyScore" jdbcType="BIGINT" />
+    	<result column="real_education" property="realEducation" jdbcType="VARCHAR" />
+    	<result column="is_house_loan" property="isHouseLoan" jdbcType="TINYINT" />
+    	<result column="is_accumulation_fund" property="isAccumulationFund" jdbcType="TINYINT" />
+    	<result column="is_creadit" property="isCreadit" jdbcType="TINYINT" />
+    	<result column="creadit" property="creadit" jdbcType="DECIMAL" />
+    	<result column="company_name" property="companyName" jdbcType="VARCHAR" />
+    	<result column="company_place" property="companyPlace" jdbcType="VARCHAR" />
+    	<result column="live_place" property="livePlace" jdbcType="VARCHAR" />
+    	<result column="contract_name_one" property="contractNameOne" jdbcType="VARCHAR" />
+    	<result column="contract_telphone_one" property="contractTelphoneOne" jdbcType="VARCHAR" />
+    	<result column="contract_relation_one" property="contractRelationOne" jdbcType="VARCHAR" />
+    	<result column="contract_name_two" property="contractNameTwo" jdbcType="VARCHAR" />
+    	<result column="contract_telphone_two" property="contractTelphoneTwo" jdbcType="VARCHAR" />
+    	<result column="contract_relation_two" property="contractRelationTwo" jdbcType="VARCHAR" />
+    	<result column="contract_name_three" property="contractNameThree" jdbcType="VARCHAR" />
+    	<result column="contract_telphone_three" property="contractTelphoneThree" jdbcType="VARCHAR" />
+    	<result column="contract_relation_three" property="contractRelationThree" jdbcType="VARCHAR" />
+    	<result column="contract_name_four" property="contractNameFour" jdbcType="VARCHAR" />
+    	<result column="contract_telphone_four" property="contractTelphoneFour" jdbcType="VARCHAR" />
+    	<result column="contract_relation_four" property="contractRelationFour" jdbcType="VARCHAR" />
+    	<result column="contract_name_five" property="contractNameFive" jdbcType="VARCHAR" />
+    	<result column="contract_telphone_five" property="contractTelphoneFive" jdbcType="VARCHAR" />
+    	<result column="contract_relation_five" property="contractRelationFive" jdbcType="VARCHAR" />
+    	<result column="os_version" property="osVersion" jdbcType="VARCHAR" />
+    	<result column="fill_date" property="fillDate" jdbcType="BIGINT" />
+    	<result column="fill_time" property="fillTime" jdbcType="BIGINT" />
+    	<result column="employee_two_user_id" property="employeeTwoUserId" jdbcType="VARCHAR" />
+    	<result column="is_fill" property="isFill" jdbcType="TINYINT" />
+    	<result column="is_hanle" property="isHanle" jdbcType="TINYINT" />
+    	<result column="handle_descript" property="handleDescript" jdbcType="VARCHAR" />
+    	<result column="handle_date" property="handleDate" jdbcType="BIGINT" />
+    	<result column="handle_time" property="handleTime" jdbcType="BIGINT" />
+	</resultMap>
+	
+	 	
+
+
+	
+	<!--根据条件获取列表页-->
+
+
+	<!--根据条件分页查询-->
+  	<select id="getListRelative" resultType="map" parameterType="map">
+		select 
+		<if test="fieldLs == null or fieldLs.size()==0">
+			clientData.*
+		</if>
+		<if test="fieldLs != null and fieldLs.size()>0" >   
+			<foreach collection="fieldLs" item = "field" separator=",">
+				 clientData.${field}
+			</foreach>			
+		</if>
+		<if test="fieldLrs != null and fieldLrs.size()>0" >   
+			,
+			<foreach collection="fieldLrs" item = "field" separator=",">
+				 ${field}
+			</foreach>			
+		</if>
+		,channel.channel_name	
+		,channelUser.channel_user_name	
+		,consoleUser.console_user_name	
+		,employeeUser.employee_one_user_name	
+		,employeeUserU.employee_two_user_name	
+		from client_data clientData
+		left join channel	channel on channel.id=clientData.channel_id
+		left join channel_user	channelUser on channelUser.id=clientData.channel_user_id
+		left join console_user	consoleUser on consoleUser.id=clientData.console_user_id
+		left join employee_user	employeeUser on employeeUser.id=clientData.employee_one_user_id
+		left join employee_user	employeeUserU on employeeUserU.id=clientData.employee_two_user_id
+		<trim prefix="where" prefixOverrides="and">
+			<if test="record.id != null and record.id != ''" >    
+				and clientData.id like  '%${record.id}%'
+			</if>
+			<if test="record.telphoneNumber != null and record.telphoneNumber != ''" >    
+				and clientData.telphone_number like  '%${record.telphoneNumber}%'
+			</if>
+			<if test="record.channelId != null and record.channelId != ''" >    
+				and clientData.channel_id like  '%${record.channelId}%'
+			</if>
+			<if test="record.channelUserId != null and record.channelUserId != ''" >    
+				and clientData.channel_user_id like  '%${record.channelUserId}%'
+			</if>
+			<if test="record.createDate != null" >
+				and clientData.create_date =  #{record.createDate,jdbcType=BIGINT}
+			</if> 
+			<if test="record.createTime != null" >
+				and clientData.create_time =  #{record.createTime,jdbcType=BIGINT}
+			</if> 
+			<if test="record.consoleUserId != null and record.consoleUserId != ''" >    
+				and clientData.console_user_id like  '%${record.consoleUserId}%'
+			</if>
+			<if test="record.distributeDate != null" >
+				and clientData.distribute_date =  #{record.distributeDate,jdbcType=BIGINT}
+			</if> 
+			<if test="record.distributeTime != null" >
+				and clientData.distribute_time =  #{record.distributeTime,jdbcType=BIGINT}
+			</if> 
+			<if test="record.employeeOneUserId != null and record.employeeOneUserId != ''" >    
+				and clientData.employee_one_user_id like  '%${record.employeeOneUserId}%'
+			</if>
+			<if test="record.isDial != null" >
+				and clientData.is_dial =  #{record.isDial,jdbcType=TINYINT}
+			</if> 
+			<if test="record.isPurpose != null" >
+				and clientData.is_purpose =  #{record.isPurpose,jdbcType=TINYINT}
+			</if> 
+			<if test="record.purposeDescript != null and record.purposeDescript != ''" >    
+				and clientData.purpose_descript like  '%${record.purposeDescript}%'
+			</if>
+			<if test="record.dialDate != null" >
+				and clientData.dial_date =  #{record.dialDate,jdbcType=BIGINT}
+			</if> 
+			<if test="record.dialTime != null" >
+				and clientData.dial_time =  #{record.dialTime,jdbcType=BIGINT}
+			</if> 
+			<if test="record.realName != null and record.realName != ''" >    
+				and clientData.real_name like  '%${record.realName}%'
+			</if>
+			<if test="record.isReal != null" >
+				and clientData.is_real =  #{record.isReal,jdbcType=TINYINT}
+			</if> 
+			<if test="record.servicePassword != null and record.servicePassword != ''" >    
+				and clientData.service_password like  '%${record.servicePassword}%'
+			</if>
+			<if test="record.phoneUseYear != null and record.phoneUseYear != ''" >    
+				and clientData.phone_use_year like  '%${record.phoneUseYear}%'
+			</if>
+			<if test="record.identificationCardNumber != null and record.identificationCardNumber != ''" >    
+				and clientData.identification_card_number like  '%${record.identificationCardNumber}%'
+			</if>
+			<if test="record.seseamScore != null" >
+				and clientData.seseam_score =  #{record.seseamScore,jdbcType=BIGINT}
+			</if> 
+			<if test="record.naughtyScore != null" >
+				and clientData.naughty_score =  #{record.naughtyScore,jdbcType=BIGINT}
+			</if> 
+			<if test="record.realEducation != null and record.realEducation != ''" >    
+				and clientData.real_education like  '%${record.realEducation}%'
+			</if>
+			<if test="record.isHouseLoan != null" >
+				and clientData.is_house_loan =  #{record.isHouseLoan,jdbcType=TINYINT}
+			</if> 
+			<if test="record.isAccumulationFund != null" >
+				and clientData.is_accumulation_fund =  #{record.isAccumulationFund,jdbcType=TINYINT}
+			</if> 
+			<if test="record.isCreadit != null" >
+				and clientData.is_creadit =  #{record.isCreadit,jdbcType=TINYINT}
+			</if> 
+			<if test="record.creadit != null" >
+				and clientData.creadit =  #{record.creadit,jdbcType=DECIMAL}
+			</if> 
+			<if test="record.companyName != null and record.companyName != ''" >    
+				and clientData.company_name like  '%${record.companyName}%'
+			</if>
+			<if test="record.companyPlace != null and record.companyPlace != ''" >    
+				and clientData.company_place like  '%${record.companyPlace}%'
+			</if>
+			<if test="record.livePlace != null and record.livePlace != ''" >    
+				and clientData.live_place like  '%${record.livePlace}%'
+			</if>
+			<if test="record.contractNameOne != null and record.contractNameOne != ''" >    
+				and clientData.contract_name_one like  '%${record.contractNameOne}%'
+			</if>
+			<if test="record.contractTelphoneOne != null and record.contractTelphoneOne != ''" >    
+				and clientData.contract_telphone_one like  '%${record.contractTelphoneOne}%'
+			</if>
+			<if test="record.contractRelationOne != null and record.contractRelationOne != ''" >    
+				and clientData.contract_relation_one like  '%${record.contractRelationOne}%'
+			</if>
+			<if test="record.contractNameTwo != null and record.contractNameTwo != ''" >    
+				and clientData.contract_name_two like  '%${record.contractNameTwo}%'
+			</if>
+			<if test="record.contractTelphoneTwo != null and record.contractTelphoneTwo != ''" >    
+				and clientData.contract_telphone_two like  '%${record.contractTelphoneTwo}%'
+			</if>
+			<if test="record.contractRelationTwo != null and record.contractRelationTwo != ''" >    
+				and clientData.contract_relation_two like  '%${record.contractRelationTwo}%'
+			</if>
+			<if test="record.contractNameThree != null and record.contractNameThree != ''" >    
+				and clientData.contract_name_three like  '%${record.contractNameThree}%'
+			</if>
+			<if test="record.contractTelphoneThree != null and record.contractTelphoneThree != ''" >    
+				and clientData.contract_telphone_three like  '%${record.contractTelphoneThree}%'
+			</if>
+			<if test="record.contractRelationThree != null and record.contractRelationThree != ''" >    
+				and clientData.contract_relation_three like  '%${record.contractRelationThree}%'
+			</if>
+			<if test="record.contractNameFour != null and record.contractNameFour != ''" >    
+				and clientData.contract_name_four like  '%${record.contractNameFour}%'
+			</if>
+			<if test="record.contractTelphoneFour != null and record.contractTelphoneFour != ''" >    
+				and clientData.contract_telphone_four like  '%${record.contractTelphoneFour}%'
+			</if>
+			<if test="record.contractRelationFour != null and record.contractRelationFour != ''" >    
+				and clientData.contract_relation_four like  '%${record.contractRelationFour}%'
+			</if>
+			<if test="record.contractNameFive != null and record.contractNameFive != ''" >    
+				and clientData.contract_name_five like  '%${record.contractNameFive}%'
+			</if>
+			<if test="record.contractTelphoneFive != null and record.contractTelphoneFive != ''" >    
+				and clientData.contract_telphone_five like  '%${record.contractTelphoneFive}%'
+			</if>
+			<if test="record.contractRelationFive != null and record.contractRelationFive != ''" >    
+				and clientData.contract_relation_five like  '%${record.contractRelationFive}%'
+			</if>
+			<if test="record.osVersion != null and record.osVersion != ''" >    
+				and clientData.os_version like  '%${record.osVersion}%'
+			</if>
+			<if test="record.fillDate != null" >
+				and clientData.fill_date =  #{record.fillDate,jdbcType=BIGINT}
+			</if> 
+			<if test="record.fillTime != null" >
+				and clientData.fill_time =  #{record.fillTime,jdbcType=BIGINT}
+			</if> 
+			<if test="record.employeeTwoUserId != null and record.employeeTwoUserId != ''" >    
+				and clientData.employee_two_user_id like  '%${record.employeeTwoUserId}%'
+			</if>
+			<if test="record.isFill != null" >
+				and clientData.is_fill =  #{record.isFill,jdbcType=TINYINT}
+			</if> 
+			<if test="record.isHanle != null" >
+				and clientData.is_hanle =  #{record.isHanle,jdbcType=TINYINT}
+			</if> 
+			<if test="record.handleDescript != null and record.handleDescript != ''" >    
+				and clientData.handle_descript like  '%${record.handleDescript}%'
+			</if>
+			<if test="record.handleDate != null" >
+				and clientData.handle_date =  #{record.handleDate,jdbcType=BIGINT}
+			</if> 
+			<if test="record.handleTime != null" >
+				and clientData.handle_time =  #{record.handleTime,jdbcType=BIGINT}
+			</if> 
+		</trim>
+		<if test="groupByLs != null and groupByLs.size()>0" >
+			<trim prefix="group by " prefixOverrides=",">
+				<foreach collection="groupByLs" item = "groupBy" separator=",">
+					 clientData.${groupBy}
+				</foreach>
+			</trim>
+		</if>
+		<if test="orderByLs != null and orderByLs.size()>0" >
+			<trim prefix="order by " prefixOverrides=",">
+				<foreach collection="orderByLs" item = "orderBy" separator=",">
+					 clientData.${orderBy}
+				</foreach>
+			</trim>
+		</if>
+		<if test="orderByLs == null or orderByLs.size ==0">
+			order by clientData.create_date desc,clientData.create_time desc
+		</if>		
+	</select>
+	
+	<!--根据条件分页查询-->
+  	<select id="getListRelativeByParams" resultType="map" parameterType="map">
+		select 
+		<if test="fieldLs == null or fieldLs.size()==0">
+			clientData.*
+		</if>
+		<if test="fieldLs != null and fieldLs.size()>0" >   
+			<foreach collection="fieldLs" item = "field" separator=",">
+				 clientData.${field}
+			</foreach>			
+		</if>
+		<if test="fieldLrs != null and fieldLrs.size()>0" >   
+			,
+			<foreach collection="fieldLrs" item = "field" separator=",">
+				 ${field}
+			</foreach>			
+		</if>		
+		,channel.channel_name	
+		,channelUser.channel_user_name	
+		,consoleUser.console_user_name	
+		,employeeUser.employee_one_user_name	
+		,employeeUserU.employee_two_user_name	
+		from client_data clientData
+		left join channel	channel on channel.id=clientData.channel_id
+		left join channel_user	channelUser on channelUser.id=clientData.channel_user_id
+		left join console_user	consoleUser on consoleUser.id=clientData.console_user_id
+		left join employee_user	employeeUser on employeeUser.id=clientData.employee_one_user_id
+		left join employee_user	employeeUserU on employeeUserU.id=clientData.employee_two_user_id
+		<trim prefix="where" prefixOverrides="and">
+			<foreach collection="whParams.keys" item = "key">
+				<if test="whParams[key]!=null and whParams[key].size()>0">
+					<trim prefix="and">
+						<foreach collection="whParams[key]" item = "item" open="(" separator=" or " close=")">
+							 clientData.${key}=#{item}
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+		</trim>
+		<if test="groupByLs != null and groupByLs.size()>0" >
+			<trim prefix="group by " prefixOverrides=",">
+				<foreach collection="groupByLs" item = "groupBy" separator=",">
+					 clientData.${groupBy}
+				</foreach>
+			</trim>
+		</if>		
+		<if test="orderByLs != null and orderByLs.size()>0" >
+			<trim prefix="order by " prefixOverrides=",">
+				<foreach collection="orderByLs" item = "orderBy" separator=",">
+					 clientData.${orderBy}
+				</foreach>
+			</trim>
+		</if>
+		<if test="orderByLs == null or orderByLs.size ==0">
+			order by clientData.create_date desc,clientData.create_time desc
+		</if>		
+	</select>	
+	
+
+		
+	<!--根据自己条件查询列表-->
+  	<select id="getList" resultType="clientData" parameterType="map">
+		select 
+		<if test="fields == null or fields == ''" >    
+			*
+		</if>
+		<if test="fields != null and fields != ''" >    
+			${fields}
+		</if>
+		from client_data
+		<if test="record!=null">
+			<trim prefix="where" prefixOverrides="and">
+				<if test="record.id != null and record.id != ''" >    
+					and id=#{record.id,jdbcType=VARCHAR}
+				</if>
+				<if test="record.telphoneNumber != null and record.telphoneNumber != ''" >    
+					and telphone_number=#{record.telphoneNumber,jdbcType=VARCHAR}
+				</if>
+				<if test="record.channelId != null and record.channelId != ''" >    
+					and channel_id=#{record.channelId,jdbcType=VARCHAR}
+				</if>
+				<if test="record.channelUserId != null and record.channelUserId != ''" >    
+					and channel_user_id=#{record.channelUserId,jdbcType=VARCHAR}
+				</if>
+				<if test="record.createDate != null" >
+					and create_date =  #{record.createDate,jdbcType=BIGINT}
+				</if>
+				<if test="record.createTime != null" >
+					and create_time =  #{record.createTime,jdbcType=BIGINT}
+				</if>
+				<if test="record.consoleUserId != null and record.consoleUserId != ''" >    
+					and console_user_id=#{record.consoleUserId,jdbcType=VARCHAR}
+				</if>
+				<if test="record.distributeDate != null" >
+					and distribute_date =  #{record.distributeDate,jdbcType=BIGINT}
+				</if>
+				<if test="record.distributeTime != null" >
+					and distribute_time =  #{record.distributeTime,jdbcType=BIGINT}
+				</if>
+				<if test="record.employeeOneUserId != null and record.employeeOneUserId != ''" >    
+					and employee_one_user_id=#{record.employeeOneUserId,jdbcType=VARCHAR}
+				</if>
+				<if test="record.isDial != null" >
+					and is_dial =  #{record.isDial,jdbcType=TINYINT}
+				</if>
+				<if test="record.isPurpose != null" >
+					and is_purpose =  #{record.isPurpose,jdbcType=TINYINT}
+				</if>
+				<if test="record.purposeDescript != null and record.purposeDescript != ''" >    
+					and purpose_descript=#{record.purposeDescript,jdbcType=VARCHAR}
+				</if>
+				<if test="record.dialDate != null" >
+					and dial_date =  #{record.dialDate,jdbcType=BIGINT}
+				</if>
+				<if test="record.dialTime != null" >
+					and dial_time =  #{record.dialTime,jdbcType=BIGINT}
+				</if>
+				<if test="record.realName != null and record.realName != ''" >    
+					and real_name=#{record.realName,jdbcType=VARCHAR}
+				</if>
+				<if test="record.isReal != null" >
+					and is_real =  #{record.isReal,jdbcType=TINYINT}
+				</if>
+				<if test="record.servicePassword != null and record.servicePassword != ''" >    
+					and service_password=#{record.servicePassword,jdbcType=VARCHAR}
+				</if>
+				<if test="record.phoneUseYear != null and record.phoneUseYear != ''" >    
+					and phone_use_year=#{record.phoneUseYear,jdbcType=VARCHAR}
+				</if>
+				<if test="record.identificationCardNumber != null and record.identificationCardNumber != ''" >    
+					and identification_card_number=#{record.identificationCardNumber,jdbcType=VARCHAR}
+				</if>
+				<if test="record.seseamScore != null" >
+					and seseam_score =  #{record.seseamScore,jdbcType=BIGINT}
+				</if>
+				<if test="record.naughtyScore != null" >
+					and naughty_score =  #{record.naughtyScore,jdbcType=BIGINT}
+				</if>
+				<if test="record.realEducation != null and record.realEducation != ''" >    
+					and real_education=#{record.realEducation,jdbcType=VARCHAR}
+				</if>
+				<if test="record.isHouseLoan != null" >
+					and is_house_loan =  #{record.isHouseLoan,jdbcType=TINYINT}
+				</if>
+				<if test="record.isAccumulationFund != null" >
+					and is_accumulation_fund =  #{record.isAccumulationFund,jdbcType=TINYINT}
+				</if>
+				<if test="record.isCreadit != null" >
+					and is_creadit =  #{record.isCreadit,jdbcType=TINYINT}
+				</if>
+				<if test="record.creadit != null" >
+					and creadit =  #{record.creadit,jdbcType=DECIMAL}
+				</if>
+				<if test="record.companyName != null and record.companyName != ''" >    
+					and company_name=#{record.companyName,jdbcType=VARCHAR}
+				</if>
+				<if test="record.companyPlace != null and record.companyPlace != ''" >    
+					and company_place=#{record.companyPlace,jdbcType=VARCHAR}
+				</if>
+				<if test="record.livePlace != null and record.livePlace != ''" >    
+					and live_place=#{record.livePlace,jdbcType=VARCHAR}
+				</if>
+				<if test="record.contractNameOne != null and record.contractNameOne != ''" >    
+					and contract_name_one=#{record.contractNameOne,jdbcType=VARCHAR}
+				</if>
+				<if test="record.contractTelphoneOne != null and record.contractTelphoneOne != ''" >    
+					and contract_telphone_one=#{record.contractTelphoneOne,jdbcType=VARCHAR}
+				</if>
+				<if test="record.contractRelationOne != null and record.contractRelationOne != ''" >    
+					and contract_relation_one=#{record.contractRelationOne,jdbcType=VARCHAR}
+				</if>
+				<if test="record.contractNameTwo != null and record.contractNameTwo != ''" >    
+					and contract_name_two=#{record.contractNameTwo,jdbcType=VARCHAR}
+				</if>
+				<if test="record.contractTelphoneTwo != null and record.contractTelphoneTwo != ''" >    
+					and contract_telphone_two=#{record.contractTelphoneTwo,jdbcType=VARCHAR}
+				</if>
+				<if test="record.contractRelationTwo != null and record.contractRelationTwo != ''" >    
+					and contract_relation_two=#{record.contractRelationTwo,jdbcType=VARCHAR}
+				</if>
+				<if test="record.contractNameThree != null and record.contractNameThree != ''" >    
+					and contract_name_three=#{record.contractNameThree,jdbcType=VARCHAR}
+				</if>
+				<if test="record.contractTelphoneThree != null and record.contractTelphoneThree != ''" >    
+					and contract_telphone_three=#{record.contractTelphoneThree,jdbcType=VARCHAR}
+				</if>
+				<if test="record.contractRelationThree != null and record.contractRelationThree != ''" >    
+					and contract_relation_three=#{record.contractRelationThree,jdbcType=VARCHAR}
+				</if>
+				<if test="record.contractNameFour != null and record.contractNameFour != ''" >    
+					and contract_name_four=#{record.contractNameFour,jdbcType=VARCHAR}
+				</if>
+				<if test="record.contractTelphoneFour != null and record.contractTelphoneFour != ''" >    
+					and contract_telphone_four=#{record.contractTelphoneFour,jdbcType=VARCHAR}
+				</if>
+				<if test="record.contractRelationFour != null and record.contractRelationFour != ''" >    
+					and contract_relation_four=#{record.contractRelationFour,jdbcType=VARCHAR}
+				</if>
+				<if test="record.contractNameFive != null and record.contractNameFive != ''" >    
+					and contract_name_five=#{record.contractNameFive,jdbcType=VARCHAR}
+				</if>
+				<if test="record.contractTelphoneFive != null and record.contractTelphoneFive != ''" >    
+					and contract_telphone_five=#{record.contractTelphoneFive,jdbcType=VARCHAR}
+				</if>
+				<if test="record.contractRelationFive != null and record.contractRelationFive != ''" >    
+					and contract_relation_five=#{record.contractRelationFive,jdbcType=VARCHAR}
+				</if>
+				<if test="record.osVersion != null and record.osVersion != ''" >    
+					and os_version=#{record.osVersion,jdbcType=VARCHAR}
+				</if>
+				<if test="record.fillDate != null" >
+					and fill_date =  #{record.fillDate,jdbcType=BIGINT}
+				</if>
+				<if test="record.fillTime != null" >
+					and fill_time =  #{record.fillTime,jdbcType=BIGINT}
+				</if>
+				<if test="record.employeeTwoUserId != null and record.employeeTwoUserId != ''" >    
+					and employee_two_user_id=#{record.employeeTwoUserId,jdbcType=VARCHAR}
+				</if>
+				<if test="record.isFill != null" >
+					and is_fill =  #{record.isFill,jdbcType=TINYINT}
+				</if>
+				<if test="record.isHanle != null" >
+					and is_hanle =  #{record.isHanle,jdbcType=TINYINT}
+				</if>
+				<if test="record.handleDescript != null and record.handleDescript != ''" >    
+					and handle_descript=#{record.handleDescript,jdbcType=VARCHAR}
+				</if>
+				<if test="record.handleDate != null" >
+					and handle_date =  #{record.handleDate,jdbcType=BIGINT}
+				</if>
+				<if test="record.handleTime != null" >
+					and handle_time =  #{record.handleTime,jdbcType=BIGINT}
+				</if>
+			</trim>
+		</if>
+		<if test="groupBys != null and groupBys != ''" >
+			group by ${groupBys}
+		</if>
+		<if test="orderBys != null and orderBys != ''" >
+			 order by ${orderBys}
+		</if>
+		<if test="orderBys == null or orderBys == ''">
+			order by create_date desc,create_time desc
+		</if>	
+	</select>
+	
+	<!--根据自己条件查询列表-->
+  	<select id="getListByParams" resultType="clientData" parameterType="map">
+		select 
+		<if test="fields == null or fields == ''" >    
+			*
+		</if>
+		<if test="fields != null and fields != ''" >    
+			${fields}
+		</if>
+		from client_data
+		<if test="whParams != null and whParams.size()>0" >
+			<trim prefix="where" prefixOverrides="and">
+				<foreach collection="whParams.keys" item = "key">
+					<if test="whParams[key]!=null and whParams[key].size()>0">
+						<trim prefix="and">
+							<foreach collection="whParams[key]" item = "item" open="(" separator=" or " close=")">
+								 ${key}=#{item}
+							</foreach>
+						</trim>
+					</if>
+				</foreach>	
+			</trim>
+		</if>
+		<if test="groupBys != null and groupBys != ''" >
+			group by ${groupBys}
+		</if>
+		<if test="orderBys != null and orderBys != ''" >
+			 order by ${orderBys}
+		</if>
+		<if test="orderBys == null or orderBys == ''">
+			order by create_date desc,create_time desc
+		</if>	
+	</select>		
+	
+	<select id="getOneRelativeByParams" resultType="map" parameterType="map">	
+		<if test="whParams!=null and whParams.size()>0">
+			select 
+			<if test="fieldLs == null or fieldLs.size()==0">
+				clientData.*
+			</if>
+			<if test="fieldLs != null and fieldLs.size()>0" >   
+				<foreach collection="fieldLs" item = "field" separator=",">
+					 clientData.${field}
+				</foreach>
+			</if>
+			<if test="fieldLrs != null and fieldLrs.size()>0" >   
+				,
+				<foreach collection="fieldLrs" item = "field" separator=",">
+					 ${field}
+				</foreach>
+			</if>			
+			,channel.channel_name	
+			,channelUser.channel_user_name	
+			,consoleUser.console_user_name	
+			,employeeUser.employee_one_user_name	
+			,employeeUserU.employee_two_user_name	
+			from client_data clientData
+			left join channel	channel on channel.id=clientData.channel_id
+			left join channel_user	channelUser on channelUser.id=clientData.channel_user_id
+			left join console_user	consoleUser on consoleUser.id=clientData.console_user_id
+			left join employee_user	employeeUser on employeeUser.id=clientData.employee_one_user_id
+			left join employee_user	employeeUserU on employeeUserU.id=clientData.employee_two_user_id
+			<trim prefix="where" prefixOverrides="and">
+				<foreach collection="whParams.keys" item = "key">
+					<if test="whParams[key]!=null and whParams[key].size()>0">
+						<trim prefix="and">
+							<foreach collection="whParams[key]" item = "item" separator=" and ">
+								 clientData.${key}=#{item}
+							</foreach>
+						</trim>
+					</if>
+				</foreach>
+			</trim>	
+		</if>	
+	</select>
+
+
+	<select id="getOneRelative" resultType="map" parameterType="map">	
+		<if test="record!=null">
+			select 
+			<if test="fieldLs == null or fieldLs.size()==0">
+				clientData.*
+			</if>
+			<if test="fieldLs != null and fieldLs.size()>0" >   
+				<foreach collection="fieldLs" item = "field" separator=",">
+					 clientData.${field}
+				</foreach>
+			</if>
+			<if test="fieldLrs != null and fieldLrs.size()>0" >   
+				,
+				<foreach collection="fieldLrs" item = "field" separator=",">
+					 ${field}
+				</foreach>
+			</if>			
+			,channel.channel_name	
+			,channelUser.channel_user_name	
+			,consoleUser.console_user_name	
+			,employeeUser.employee_one_user_name	
+			,employeeUserU.employee_two_user_name	
+			from client_data clientData
+			left join channel	channel on channel.id=clientData.channel_id
+			left join channel_user	channelUser on channelUser.id=clientData.channel_user_id
+			left join console_user	consoleUser on consoleUser.id=clientData.console_user_id
+			left join employee_user	employeeUser on employeeUser.id=clientData.employee_one_user_id
+			left join employee_user	employeeUserU on employeeUserU.id=clientData.employee_two_user_id
+			<trim prefix="where" prefixOverrides="and">
+				<if test="record.id != null and record.id != ''" >    
+					and clientData.id=#{record.id,jdbcType=VARCHAR}
+				</if>
+				<if test="record.telphoneNumber != null and record.telphoneNumber != ''" >    
+					and clientData.telphone_number=#{record.telphoneNumber,jdbcType=VARCHAR}
+				</if>
+				<if test="record.channelId != null and record.channelId != ''" >    
+					and clientData.channel_id=#{record.channelId,jdbcType=VARCHAR}
+				</if>
+				<if test="record.channelUserId != null and record.channelUserId != ''" >    
+					and clientData.channel_user_id=#{record.channelUserId,jdbcType=VARCHAR}
+				</if>
+				<if test="record.createDate != null" >
+					and clientData.create_date =  #{record.createDate,jdbcType=BIGINT}
+				</if>
+				<if test="record.createTime != null" >
+					and clientData.create_time =  #{record.createTime,jdbcType=BIGINT}
+				</if>
+				<if test="record.consoleUserId != null and record.consoleUserId != ''" >    
+					and clientData.console_user_id=#{record.consoleUserId,jdbcType=VARCHAR}
+				</if>
+				<if test="record.distributeDate != null" >
+					and clientData.distribute_date =  #{record.distributeDate,jdbcType=BIGINT}
+				</if>
+				<if test="record.distributeTime != null" >
+					and clientData.distribute_time =  #{record.distributeTime,jdbcType=BIGINT}
+				</if>
+				<if test="record.employeeOneUserId != null and record.employeeOneUserId != ''" >    
+					and clientData.employee_one_user_id=#{record.employeeOneUserId,jdbcType=VARCHAR}
+				</if>
+				<if test="record.isDial != null" >
+					and clientData.is_dial =  #{record.isDial,jdbcType=TINYINT}
+				</if>
+				<if test="record.isPurpose != null" >
+					and clientData.is_purpose =  #{record.isPurpose,jdbcType=TINYINT}
+				</if>
+				<if test="record.purposeDescript != null and record.purposeDescript != ''" >    
+					and clientData.purpose_descript=#{record.purposeDescript,jdbcType=VARCHAR}
+				</if>
+				<if test="record.dialDate != null" >
+					and clientData.dial_date =  #{record.dialDate,jdbcType=BIGINT}
+				</if>
+				<if test="record.dialTime != null" >
+					and clientData.dial_time =  #{record.dialTime,jdbcType=BIGINT}
+				</if>
+				<if test="record.realName != null and record.realName != ''" >    
+					and clientData.real_name=#{record.realName,jdbcType=VARCHAR}
+				</if>
+				<if test="record.isReal != null" >
+					and clientData.is_real =  #{record.isReal,jdbcType=TINYINT}
+				</if>
+				<if test="record.servicePassword != null and record.servicePassword != ''" >    
+					and clientData.service_password=#{record.servicePassword,jdbcType=VARCHAR}
+				</if>
+				<if test="record.phoneUseYear != null and record.phoneUseYear != ''" >    
+					and clientData.phone_use_year=#{record.phoneUseYear,jdbcType=VARCHAR}
+				</if>
+				<if test="record.identificationCardNumber != null and record.identificationCardNumber != ''" >    
+					and clientData.identification_card_number=#{record.identificationCardNumber,jdbcType=VARCHAR}
+				</if>
+				<if test="record.seseamScore != null" >
+					and clientData.seseam_score =  #{record.seseamScore,jdbcType=BIGINT}
+				</if>
+				<if test="record.naughtyScore != null" >
+					and clientData.naughty_score =  #{record.naughtyScore,jdbcType=BIGINT}
+				</if>
+				<if test="record.realEducation != null and record.realEducation != ''" >    
+					and clientData.real_education=#{record.realEducation,jdbcType=VARCHAR}
+				</if>
+				<if test="record.isHouseLoan != null" >
+					and clientData.is_house_loan =  #{record.isHouseLoan,jdbcType=TINYINT}
+				</if>
+				<if test="record.isAccumulationFund != null" >
+					and clientData.is_accumulation_fund =  #{record.isAccumulationFund,jdbcType=TINYINT}
+				</if>
+				<if test="record.isCreadit != null" >
+					and clientData.is_creadit =  #{record.isCreadit,jdbcType=TINYINT}
+				</if>
+				<if test="record.creadit != null" >
+					and clientData.creadit =  #{record.creadit,jdbcType=DECIMAL}
+				</if>
+				<if test="record.companyName != null and record.companyName != ''" >    
+					and clientData.company_name=#{record.companyName,jdbcType=VARCHAR}
+				</if>
+				<if test="record.companyPlace != null and record.companyPlace != ''" >    
+					and clientData.company_place=#{record.companyPlace,jdbcType=VARCHAR}
+				</if>
+				<if test="record.livePlace != null and record.livePlace != ''" >    
+					and clientData.live_place=#{record.livePlace,jdbcType=VARCHAR}
+				</if>
+				<if test="record.contractNameOne != null and record.contractNameOne != ''" >    
+					and clientData.contract_name_one=#{record.contractNameOne,jdbcType=VARCHAR}
+				</if>
+				<if test="record.contractTelphoneOne != null and record.contractTelphoneOne != ''" >    
+					and clientData.contract_telphone_one=#{record.contractTelphoneOne,jdbcType=VARCHAR}
+				</if>
+				<if test="record.contractRelationOne != null and record.contractRelationOne != ''" >    
+					and clientData.contract_relation_one=#{record.contractRelationOne,jdbcType=VARCHAR}
+				</if>
+				<if test="record.contractNameTwo != null and record.contractNameTwo != ''" >    
+					and clientData.contract_name_two=#{record.contractNameTwo,jdbcType=VARCHAR}
+				</if>
+				<if test="record.contractTelphoneTwo != null and record.contractTelphoneTwo != ''" >    
+					and clientData.contract_telphone_two=#{record.contractTelphoneTwo,jdbcType=VARCHAR}
+				</if>
+				<if test="record.contractRelationTwo != null and record.contractRelationTwo != ''" >    
+					and clientData.contract_relation_two=#{record.contractRelationTwo,jdbcType=VARCHAR}
+				</if>
+				<if test="record.contractNameThree != null and record.contractNameThree != ''" >    
+					and clientData.contract_name_three=#{record.contractNameThree,jdbcType=VARCHAR}
+				</if>
+				<if test="record.contractTelphoneThree != null and record.contractTelphoneThree != ''" >    
+					and clientData.contract_telphone_three=#{record.contractTelphoneThree,jdbcType=VARCHAR}
+				</if>
+				<if test="record.contractRelationThree != null and record.contractRelationThree != ''" >    
+					and clientData.contract_relation_three=#{record.contractRelationThree,jdbcType=VARCHAR}
+				</if>
+				<if test="record.contractNameFour != null and record.contractNameFour != ''" >    
+					and clientData.contract_name_four=#{record.contractNameFour,jdbcType=VARCHAR}
+				</if>
+				<if test="record.contractTelphoneFour != null and record.contractTelphoneFour != ''" >    
+					and clientData.contract_telphone_four=#{record.contractTelphoneFour,jdbcType=VARCHAR}
+				</if>
+				<if test="record.contractRelationFour != null and record.contractRelationFour != ''" >    
+					and clientData.contract_relation_four=#{record.contractRelationFour,jdbcType=VARCHAR}
+				</if>
+				<if test="record.contractNameFive != null and record.contractNameFive != ''" >    
+					and clientData.contract_name_five=#{record.contractNameFive,jdbcType=VARCHAR}
+				</if>
+				<if test="record.contractTelphoneFive != null and record.contractTelphoneFive != ''" >    
+					and clientData.contract_telphone_five=#{record.contractTelphoneFive,jdbcType=VARCHAR}
+				</if>
+				<if test="record.contractRelationFive != null and record.contractRelationFive != ''" >    
+					and clientData.contract_relation_five=#{record.contractRelationFive,jdbcType=VARCHAR}
+				</if>
+				<if test="record.osVersion != null and record.osVersion != ''" >    
+					and clientData.os_version=#{record.osVersion,jdbcType=VARCHAR}
+				</if>
+				<if test="record.fillDate != null" >
+					and clientData.fill_date =  #{record.fillDate,jdbcType=BIGINT}
+				</if>
+				<if test="record.fillTime != null" >
+					and clientData.fill_time =  #{record.fillTime,jdbcType=BIGINT}
+				</if>
+				<if test="record.employeeTwoUserId != null and record.employeeTwoUserId != ''" >    
+					and clientData.employee_two_user_id=#{record.employeeTwoUserId,jdbcType=VARCHAR}
+				</if>
+				<if test="record.isFill != null" >
+					and clientData.is_fill =  #{record.isFill,jdbcType=TINYINT}
+				</if>
+				<if test="record.isHanle != null" >
+					and clientData.is_hanle =  #{record.isHanle,jdbcType=TINYINT}
+				</if>
+				<if test="record.handleDescript != null and record.handleDescript != ''" >    
+					and clientData.handle_descript=#{record.handleDescript,jdbcType=VARCHAR}
+				</if>
+				<if test="record.handleDate != null" >
+					and clientData.handle_date =  #{record.handleDate,jdbcType=BIGINT}
+				</if>
+				<if test="record.handleTime != null" >
+					and clientData.handle_time =  #{record.handleTime,jdbcType=BIGINT}
+				</if>
+			</trim>
+		</if>	
+	</select>
+
+	
+	<select id="getOneRelativeById" resultType="map" parameterType="java.lang.String">	
+		<if test="id != null and id != ''" >
+			select 
+			<if test="fieldLs == null or fieldLs.size()==0">
+				clientData.*
+			</if>
+			<if test="fieldLs != null and fieldLs.size()>0" >   
+				<foreach collection="fieldLs" item = "field" separator=",">
+					 clientData.${field}
+				</foreach>			
+			</if>
+			<if test="fieldLrs != null and fieldLrs.size()>0" >   
+				,
+				<foreach collection="fieldLrs" item = "field" separator=",">
+					 ${field}
+				</foreach>			
+			</if>			
+			,channel.channel_name	
+			,channelUser.channel_user_name	
+			,consoleUser.console_user_name	
+			,employeeUser.employee_one_user_name	
+			,employeeUserU.employee_two_user_name	
+			from client_data clientData
+			left join channel	channel on channel.id=clientData.channel_id
+			left join channel_user	channelUser on channelUser.id=clientData.channel_user_id
+			left join console_user	consoleUser on consoleUser.id=clientData.console_user_id
+			left join employee_user	employeeUser on employeeUser.id=clientData.employee_one_user_id
+			left join employee_user	employeeUserU on employeeUserU.id=clientData.employee_two_user_id
+			where clientData.id =  #{id,jdbcType=VARCHAR}
+		</if>	
+	</select>
+	
+	<!--根据主键查询本表结果-->
+	<select id="getOneById" resultType="clientData" parameterType="map" >
+		<if test="id != null and id != ''" > 
+			select 
+			<if test="fields == null or fields == ''" >    
+				*
+			</if>
+			<if test="fields != null and fields != ''" >    
+				${fields}
+			</if>
+			from client_data where id =  #{id,jdbcType=VARCHAR}
+		</if> 
+	</select>
+
+	<select id="getOne" resultType="clientData" parameterType="map" >
+		<if test="record!=null"> 
+			select 
+			<if test="fields == null or fields == ''" >    
+				*
+			</if>
+			<if test="fields != null and fields != ''" >    
+				${fields}
+			</if>
+			from client_data 
+			<trim prefix="where" prefixOverrides="and">
+					<if test="record.id != null and record.id != ''" > 
+					    and id =#{record.id,jdbcType=VARCHAR}
+					</if>
+					<if test="record.telphoneNumber != null and record.telphoneNumber != ''" > 
+					    and telphone_number =#{record.telphoneNumber,jdbcType=VARCHAR}
+					</if>
+					<if test="record.channelId != null and record.channelId != ''" > 
+					    and channel_id =#{record.channelId,jdbcType=VARCHAR}
+					</if>
+					<if test="record.channelUserId != null and record.channelUserId != ''" > 
+					    and channel_user_id =#{record.channelUserId,jdbcType=VARCHAR}
+					</if>
+					<if test="record.createDate != null" >
+					    and create_date =#{record.createDate,jdbcType=BIGINT}
+					</if>    
+					<if test="record.createTime != null" >
+					    and create_time =#{record.createTime,jdbcType=BIGINT}
+					</if>    
+					<if test="record.consoleUserId != null and record.consoleUserId != ''" > 
+					    and console_user_id =#{record.consoleUserId,jdbcType=VARCHAR}
+					</if>
+					<if test="record.distributeDate != null" >
+					    and distribute_date =#{record.distributeDate,jdbcType=BIGINT}
+					</if>    
+					<if test="record.distributeTime != null" >
+					    and distribute_time =#{record.distributeTime,jdbcType=BIGINT}
+					</if>    
+					<if test="record.employeeOneUserId != null and record.employeeOneUserId != ''" > 
+					    and employee_one_user_id =#{record.employeeOneUserId,jdbcType=VARCHAR}
+					</if>
+					<if test="record.isDial != null" >
+					    and is_dial =#{record.isDial,jdbcType=TINYINT}
+					</if>    
+					<if test="record.isPurpose != null" >
+					    and is_purpose =#{record.isPurpose,jdbcType=TINYINT}
+					</if>    
+					<if test="record.purposeDescript != null and record.purposeDescript != ''" > 
+					    and purpose_descript =#{record.purposeDescript,jdbcType=VARCHAR}
+					</if>
+					<if test="record.dialDate != null" >
+					    and dial_date =#{record.dialDate,jdbcType=BIGINT}
+					</if>    
+					<if test="record.dialTime != null" >
+					    and dial_time =#{record.dialTime,jdbcType=BIGINT}
+					</if>    
+					<if test="record.realName != null and record.realName != ''" > 
+					    and real_name =#{record.realName,jdbcType=VARCHAR}
+					</if>
+					<if test="record.isReal != null" >
+					    and is_real =#{record.isReal,jdbcType=TINYINT}
+					</if>    
+					<if test="record.servicePassword != null and record.servicePassword != ''" > 
+					    and service_password =#{record.servicePassword,jdbcType=VARCHAR}
+					</if>
+					<if test="record.phoneUseYear != null and record.phoneUseYear != ''" > 
+					    and phone_use_year =#{record.phoneUseYear,jdbcType=VARCHAR}
+					</if>
+					<if test="record.identificationCardNumber != null and record.identificationCardNumber != ''" > 
+					    and identification_card_number =#{record.identificationCardNumber,jdbcType=VARCHAR}
+					</if>
+					<if test="record.seseamScore != null" >
+					    and seseam_score =#{record.seseamScore,jdbcType=BIGINT}
+					</if>    
+					<if test="record.naughtyScore != null" >
+					    and naughty_score =#{record.naughtyScore,jdbcType=BIGINT}
+					</if>    
+					<if test="record.realEducation != null and record.realEducation != ''" > 
+					    and real_education =#{record.realEducation,jdbcType=VARCHAR}
+					</if>
+					<if test="record.isHouseLoan != null" >
+					    and is_house_loan =#{record.isHouseLoan,jdbcType=TINYINT}
+					</if>    
+					<if test="record.isAccumulationFund != null" >
+					    and is_accumulation_fund =#{record.isAccumulationFund,jdbcType=TINYINT}
+					</if>    
+					<if test="record.isCreadit != null" >
+					    and is_creadit =#{record.isCreadit,jdbcType=TINYINT}
+					</if>    
+					<if test="record.creadit != null" >
+					    and creadit =#{record.creadit,jdbcType=DECIMAL}
+					</if>    
+					<if test="record.companyName != null and record.companyName != ''" > 
+					    and company_name =#{record.companyName,jdbcType=VARCHAR}
+					</if>
+					<if test="record.companyPlace != null and record.companyPlace != ''" > 
+					    and company_place =#{record.companyPlace,jdbcType=VARCHAR}
+					</if>
+					<if test="record.livePlace != null and record.livePlace != ''" > 
+					    and live_place =#{record.livePlace,jdbcType=VARCHAR}
+					</if>
+					<if test="record.contractNameOne != null and record.contractNameOne != ''" > 
+					    and contract_name_one =#{record.contractNameOne,jdbcType=VARCHAR}
+					</if>
+					<if test="record.contractTelphoneOne != null and record.contractTelphoneOne != ''" > 
+					    and contract_telphone_one =#{record.contractTelphoneOne,jdbcType=VARCHAR}
+					</if>
+					<if test="record.contractRelationOne != null and record.contractRelationOne != ''" > 
+					    and contract_relation_one =#{record.contractRelationOne,jdbcType=VARCHAR}
+					</if>
+					<if test="record.contractNameTwo != null and record.contractNameTwo != ''" > 
+					    and contract_name_two =#{record.contractNameTwo,jdbcType=VARCHAR}
+					</if>
+					<if test="record.contractTelphoneTwo != null and record.contractTelphoneTwo != ''" > 
+					    and contract_telphone_two =#{record.contractTelphoneTwo,jdbcType=VARCHAR}
+					</if>
+					<if test="record.contractRelationTwo != null and record.contractRelationTwo != ''" > 
+					    and contract_relation_two =#{record.contractRelationTwo,jdbcType=VARCHAR}
+					</if>
+					<if test="record.contractNameThree != null and record.contractNameThree != ''" > 
+					    and contract_name_three =#{record.contractNameThree,jdbcType=VARCHAR}
+					</if>
+					<if test="record.contractTelphoneThree != null and record.contractTelphoneThree != ''" > 
+					    and contract_telphone_three =#{record.contractTelphoneThree,jdbcType=VARCHAR}
+					</if>
+					<if test="record.contractRelationThree != null and record.contractRelationThree != ''" > 
+					    and contract_relation_three =#{record.contractRelationThree,jdbcType=VARCHAR}
+					</if>
+					<if test="record.contractNameFour != null and record.contractNameFour != ''" > 
+					    and contract_name_four =#{record.contractNameFour,jdbcType=VARCHAR}
+					</if>
+					<if test="record.contractTelphoneFour != null and record.contractTelphoneFour != ''" > 
+					    and contract_telphone_four =#{record.contractTelphoneFour,jdbcType=VARCHAR}
+					</if>
+					<if test="record.contractRelationFour != null and record.contractRelationFour != ''" > 
+					    and contract_relation_four =#{record.contractRelationFour,jdbcType=VARCHAR}
+					</if>
+					<if test="record.contractNameFive != null and record.contractNameFive != ''" > 
+					    and contract_name_five =#{record.contractNameFive,jdbcType=VARCHAR}
+					</if>
+					<if test="record.contractTelphoneFive != null and record.contractTelphoneFive != ''" > 
+					    and contract_telphone_five =#{record.contractTelphoneFive,jdbcType=VARCHAR}
+					</if>
+					<if test="record.contractRelationFive != null and record.contractRelationFive != ''" > 
+					    and contract_relation_five =#{record.contractRelationFive,jdbcType=VARCHAR}
+					</if>
+					<if test="record.osVersion != null and record.osVersion != ''" > 
+					    and os_version =#{record.osVersion,jdbcType=VARCHAR}
+					</if>
+					<if test="record.fillDate != null" >
+					    and fill_date =#{record.fillDate,jdbcType=BIGINT}
+					</if>    
+					<if test="record.fillTime != null" >
+					    and fill_time =#{record.fillTime,jdbcType=BIGINT}
+					</if>    
+					<if test="record.employeeTwoUserId != null and record.employeeTwoUserId != ''" > 
+					    and employee_two_user_id =#{record.employeeTwoUserId,jdbcType=VARCHAR}
+					</if>
+					<if test="record.isFill != null" >
+					    and is_fill =#{record.isFill,jdbcType=TINYINT}
+					</if>    
+					<if test="record.isHanle != null" >
+					    and is_hanle =#{record.isHanle,jdbcType=TINYINT}
+					</if>    
+					<if test="record.handleDescript != null and record.handleDescript != ''" > 
+					    and handle_descript =#{record.handleDescript,jdbcType=VARCHAR}
+					</if>
+					<if test="record.handleDate != null" >
+					    and handle_date =#{record.handleDate,jdbcType=BIGINT}
+					</if>    
+					<if test="record.handleTime != null" >
+					    and handle_time =#{record.handleTime,jdbcType=BIGINT}
+					</if>    
+			</trim>			
+		</if>	
+	</select>
+
+	<select id="getOneByParams" resultType="clientData" parameterType="map" >
+		<if test="whParams!=null and whParams.size()>0"> 
+			select 
+			<if test="fields == null or fields == ''" >    
+				*
+			</if>
+			<if test="fields != null and fields != ''" >    
+				${fields}
+			</if>
+			from client_data 
+			<trim prefix="where" prefixOverrides="and">
+				<foreach collection="whParams.keys" item = "key">
+					<if test="whParams[key]!=null and whParams[key].size()>0">
+						<trim prefix="and">
+							<foreach collection="whParams[key]" item = "item" separator=" and ">
+								 ${key}=#{item}
+							</foreach>
+						</trim>
+					</if>
+				</foreach>
+			</trim>			
+		</if>	
+	</select>
+	
+	<!--查询记录总数专用语句-->
+	<select id="getCount" resultType="java.lang.Integer" parameterType="clientData">
+		select count(*) from client_data
+		<trim prefix="where" prefixOverrides="and">
+			<if test="id != null and id != ''" >    
+				and id !=  #{ id,jdbcType= VARCHAR}
+			</if>
+			<if test="telphoneNumber != null and telphoneNumber != ''" >    
+				and telphone_number =  #{ telphoneNumber,jdbcType= VARCHAR}
+			</if>					    
+			<if test="channelId != null and channelId != ''" >    
+				and channel_id =  #{ channelId,jdbcType= VARCHAR}
+			</if>					    
+			<if test="channelUserId != null and channelUserId != ''" >    
+				and channel_user_id =  #{ channelUserId,jdbcType= VARCHAR}
+			</if>					    
+			<if test="createDate != null" >
+				and create_date =  #{createDate,jdbcType=BIGINT}
+			</if>		    
+			<if test="createTime != null" >
+				and create_time =  #{createTime,jdbcType=BIGINT}
+			</if>		    
+			<if test="consoleUserId != null and consoleUserId != ''" >    
+				and console_user_id =  #{ consoleUserId,jdbcType= VARCHAR}
+			</if>					    
+			<if test="distributeDate != null" >
+				and distribute_date =  #{distributeDate,jdbcType=BIGINT}
+			</if>		    
+			<if test="distributeTime != null" >
+				and distribute_time =  #{distributeTime,jdbcType=BIGINT}
+			</if>		    
+			<if test="employeeOneUserId != null and employeeOneUserId != ''" >    
+				and employee_one_user_id =  #{ employeeOneUserId,jdbcType= VARCHAR}
+			</if>					    
+			<if test="isDial != null" >
+				and is_dial =  #{isDial,jdbcType=TINYINT}
+			</if>		    
+			<if test="isPurpose != null" >
+				and is_purpose =  #{isPurpose,jdbcType=TINYINT}
+			</if>		    
+			<if test="purposeDescript != null and purposeDescript != ''" >    
+				and purpose_descript =  #{ purposeDescript,jdbcType= VARCHAR}
+			</if>					    
+			<if test="dialDate != null" >
+				and dial_date =  #{dialDate,jdbcType=BIGINT}
+			</if>		    
+			<if test="dialTime != null" >
+				and dial_time =  #{dialTime,jdbcType=BIGINT}
+			</if>		    
+			<if test="realName != null and realName != ''" >    
+				and real_name =  #{ realName,jdbcType= VARCHAR}
+			</if>					    
+			<if test="isReal != null" >
+				and is_real =  #{isReal,jdbcType=TINYINT}
+			</if>		    
+			<if test="servicePassword != null and servicePassword != ''" >    
+				and service_password =  #{ servicePassword,jdbcType= VARCHAR}
+			</if>					    
+			<if test="phoneUseYear != null and phoneUseYear != ''" >    
+				and phone_use_year =  #{ phoneUseYear,jdbcType= VARCHAR}
+			</if>					    
+			<if test="identificationCardNumber != null and identificationCardNumber != ''" >    
+				and identification_card_number =  #{ identificationCardNumber,jdbcType= VARCHAR}
+			</if>					    
+			<if test="seseamScore != null" >
+				and seseam_score =  #{seseamScore,jdbcType=BIGINT}
+			</if>		    
+			<if test="naughtyScore != null" >
+				and naughty_score =  #{naughtyScore,jdbcType=BIGINT}
+			</if>		    
+			<if test="realEducation != null and realEducation != ''" >    
+				and real_education =  #{ realEducation,jdbcType= VARCHAR}
+			</if>					    
+			<if test="isHouseLoan != null" >
+				and is_house_loan =  #{isHouseLoan,jdbcType=TINYINT}
+			</if>		    
+			<if test="isAccumulationFund != null" >
+				and is_accumulation_fund =  #{isAccumulationFund,jdbcType=TINYINT}
+			</if>		    
+			<if test="isCreadit != null" >
+				and is_creadit =  #{isCreadit,jdbcType=TINYINT}
+			</if>		    
+			<if test="creadit != null" >
+				and creadit =  #{creadit,jdbcType=DECIMAL}
+			</if>		    
+			<if test="companyName != null and companyName != ''" >    
+				and company_name =  #{ companyName,jdbcType= VARCHAR}
+			</if>					    
+			<if test="companyPlace != null and companyPlace != ''" >    
+				and company_place =  #{ companyPlace,jdbcType= VARCHAR}
+			</if>					    
+			<if test="livePlace != null and livePlace != ''" >    
+				and live_place =  #{ livePlace,jdbcType= VARCHAR}
+			</if>					    
+			<if test="contractNameOne != null and contractNameOne != ''" >    
+				and contract_name_one =  #{ contractNameOne,jdbcType= VARCHAR}
+			</if>					    
+			<if test="contractTelphoneOne != null and contractTelphoneOne != ''" >    
+				and contract_telphone_one =  #{ contractTelphoneOne,jdbcType= VARCHAR}
+			</if>					    
+			<if test="contractRelationOne != null and contractRelationOne != ''" >    
+				and contract_relation_one =  #{ contractRelationOne,jdbcType= VARCHAR}
+			</if>					    
+			<if test="contractNameTwo != null and contractNameTwo != ''" >    
+				and contract_name_two =  #{ contractNameTwo,jdbcType= VARCHAR}
+			</if>					    
+			<if test="contractTelphoneTwo != null and contractTelphoneTwo != ''" >    
+				and contract_telphone_two =  #{ contractTelphoneTwo,jdbcType= VARCHAR}
+			</if>					    
+			<if test="contractRelationTwo != null and contractRelationTwo != ''" >    
+				and contract_relation_two =  #{ contractRelationTwo,jdbcType= VARCHAR}
+			</if>					    
+			<if test="contractNameThree != null and contractNameThree != ''" >    
+				and contract_name_three =  #{ contractNameThree,jdbcType= VARCHAR}
+			</if>					    
+			<if test="contractTelphoneThree != null and contractTelphoneThree != ''" >    
+				and contract_telphone_three =  #{ contractTelphoneThree,jdbcType= VARCHAR}
+			</if>					    
+			<if test="contractRelationThree != null and contractRelationThree != ''" >    
+				and contract_relation_three =  #{ contractRelationThree,jdbcType= VARCHAR}
+			</if>					    
+			<if test="contractNameFour != null and contractNameFour != ''" >    
+				and contract_name_four =  #{ contractNameFour,jdbcType= VARCHAR}
+			</if>					    
+			<if test="contractTelphoneFour != null and contractTelphoneFour != ''" >    
+				and contract_telphone_four =  #{ contractTelphoneFour,jdbcType= VARCHAR}
+			</if>					    
+			<if test="contractRelationFour != null and contractRelationFour != ''" >    
+				and contract_relation_four =  #{ contractRelationFour,jdbcType= VARCHAR}
+			</if>					    
+			<if test="contractNameFive != null and contractNameFive != ''" >    
+				and contract_name_five =  #{ contractNameFive,jdbcType= VARCHAR}
+			</if>					    
+			<if test="contractTelphoneFive != null and contractTelphoneFive != ''" >    
+				and contract_telphone_five =  #{ contractTelphoneFive,jdbcType= VARCHAR}
+			</if>					    
+			<if test="contractRelationFive != null and contractRelationFive != ''" >    
+				and contract_relation_five =  #{ contractRelationFive,jdbcType= VARCHAR}
+			</if>					    
+			<if test="osVersion != null and osVersion != ''" >    
+				and os_version =  #{ osVersion,jdbcType= VARCHAR}
+			</if>					    
+			<if test="fillDate != null" >
+				and fill_date =  #{fillDate,jdbcType=BIGINT}
+			</if>		    
+			<if test="fillTime != null" >
+				and fill_time =  #{fillTime,jdbcType=BIGINT}
+			</if>		    
+			<if test="employeeTwoUserId != null and employeeTwoUserId != ''" >    
+				and employee_two_user_id =  #{ employeeTwoUserId,jdbcType= VARCHAR}
+			</if>					    
+			<if test="isFill != null" >
+				and is_fill =  #{isFill,jdbcType=TINYINT}
+			</if>		    
+			<if test="isHanle != null" >
+				and is_hanle =  #{isHanle,jdbcType=TINYINT}
+			</if>		    
+			<if test="handleDescript != null and handleDescript != ''" >    
+				and handle_descript =  #{ handleDescript,jdbcType= VARCHAR}
+			</if>					    
+			<if test="handleDate != null" >
+				and handle_date =  #{handleDate,jdbcType=BIGINT}
+			</if>		    
+			<if test="handleTime != null" >
+				and handle_time =  #{handleTime,jdbcType=BIGINT}
+			</if>		    
+		</trim>
+	</select>
+	
+	<!--根据条件查询记录数量(ID不等于)-->
+	<select id="getCountByParams" resultType="java.lang.Integer" parameterType="map">
+		select count(*) from client_data
+		<trim prefix="where" prefixOverrides="and">
+			<foreach collection="whParams.keys" item = "key">
+				<if test="whParams[key]!=null and whParams[key].size()>0">
+					<trim prefix="and">
+						<foreach collection="whParams[key]" item = "item" separator=" and ">
+							 ${key}=#{item}
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+		</trim>
+	</select>	
+
+	<!--可选择插入 TODO://需要ID自动及datetime-->
+	<insert id="insert" parameterType="clientData" >
+		insert into client_data
+		<trim prefix="(" suffix=")" suffixOverrides="," >
+			id,
+			<if test="telphoneNumber != null and telphoneNumber != ''" > 
+				telphone_number,
+			</if>
+			<if test="channelId != null and channelId != ''" > 
+				channel_id,
+			</if>
+			<if test="channelUserId != null and channelUserId != ''" > 
+				channel_user_id,
+			</if>
+			<if test="consoleUserId != null and consoleUserId != ''" > 
+				console_user_id,
+			</if>
+			<if test="distributeDate != null" >
+				distribute_date,
+			</if>    
+			<if test="distributeTime != null" >
+				distribute_time,
+			</if>    
+			<if test="employeeOneUserId != null and employeeOneUserId != ''" > 
+				employee_one_user_id,
+			</if>
+			<if test="isDial != null" >
+				is_dial,
+			</if>    
+			<if test="isPurpose != null" >
+				is_purpose,
+			</if>    
+			<if test="purposeDescript != null and purposeDescript != ''" > 
+				purpose_descript,
+			</if>
+			<if test="dialDate != null" >
+				dial_date,
+			</if>    
+			<if test="dialTime != null" >
+				dial_time,
+			</if>    
+			<if test="realName != null and realName != ''" > 
+				real_name,
+			</if>
+			<if test="isReal != null" >
+				is_real,
+			</if>    
+			<if test="servicePassword != null and servicePassword != ''" > 
+				service_password,
+			</if>
+			<if test="phoneUseYear != null and phoneUseYear != ''" > 
+				phone_use_year,
+			</if>
+			<if test="identificationCardNumber != null and identificationCardNumber != ''" > 
+				identification_card_number,
+			</if>
+			<if test="seseamScore != null" >
+				seseam_score,
+			</if>    
+			<if test="naughtyScore != null" >
+				naughty_score,
+			</if>    
+			<if test="realEducation != null and realEducation != ''" > 
+				real_education,
+			</if>
+			<if test="isHouseLoan != null" >
+				is_house_loan,
+			</if>    
+			<if test="isAccumulationFund != null" >
+				is_accumulation_fund,
+			</if>    
+			<if test="isCreadit != null" >
+				is_creadit,
+			</if>    
+			<if test="creadit != null" >
+				creadit,
+			</if>    
+			<if test="companyName != null and companyName != ''" > 
+				company_name,
+			</if>
+			<if test="companyPlace != null and companyPlace != ''" > 
+				company_place,
+			</if>
+			<if test="livePlace != null and livePlace != ''" > 
+				live_place,
+			</if>
+			<if test="contractNameOne != null and contractNameOne != ''" > 
+				contract_name_one,
+			</if>
+			<if test="contractTelphoneOne != null and contractTelphoneOne != ''" > 
+				contract_telphone_one,
+			</if>
+			<if test="contractRelationOne != null and contractRelationOne != ''" > 
+				contract_relation_one,
+			</if>
+			<if test="contractNameTwo != null and contractNameTwo != ''" > 
+				contract_name_two,
+			</if>
+			<if test="contractTelphoneTwo != null and contractTelphoneTwo != ''" > 
+				contract_telphone_two,
+			</if>
+			<if test="contractRelationTwo != null and contractRelationTwo != ''" > 
+				contract_relation_two,
+			</if>
+			<if test="contractNameThree != null and contractNameThree != ''" > 
+				contract_name_three,
+			</if>
+			<if test="contractTelphoneThree != null and contractTelphoneThree != ''" > 
+				contract_telphone_three,
+			</if>
+			<if test="contractRelationThree != null and contractRelationThree != ''" > 
+				contract_relation_three,
+			</if>
+			<if test="contractNameFour != null and contractNameFour != ''" > 
+				contract_name_four,
+			</if>
+			<if test="contractTelphoneFour != null and contractTelphoneFour != ''" > 
+				contract_telphone_four,
+			</if>
+			<if test="contractRelationFour != null and contractRelationFour != ''" > 
+				contract_relation_four,
+			</if>
+			<if test="contractNameFive != null and contractNameFive != ''" > 
+				contract_name_five,
+			</if>
+			<if test="contractTelphoneFive != null and contractTelphoneFive != ''" > 
+				contract_telphone_five,
+			</if>
+			<if test="contractRelationFive != null and contractRelationFive != ''" > 
+				contract_relation_five,
+			</if>
+			<if test="osVersion != null and osVersion != ''" > 
+				os_version,
+			</if>
+			<if test="fillDate != null" >
+				fill_date,
+			</if>    
+			<if test="fillTime != null" >
+				fill_time,
+			</if>    
+			<if test="employeeTwoUserId != null and employeeTwoUserId != ''" > 
+				employee_two_user_id,
+			</if>
+			<if test="isFill != null" >
+				is_fill,
+			</if>    
+			<if test="isHanle != null" >
+				is_hanle,
+			</if>    
+			<if test="handleDescript != null and handleDescript != ''" > 
+				handle_descript,
+			</if>
+			<if test="handleDate != null" >
+				handle_date,
+			</if>    
+			<if test="handleTime != null" >
+				handle_time,
+			</if>    
+			create_date,create_time,
+    	</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides="," >
+		    <if test="id != null and id != ''" > 
+			    #{id,jdbcType=VARCHAR},
+			</if>
+			<if test="id == null or id == ''" > 
+			    REPLACE(UUID(),'-',''),
+			</if>
+			<if test="telphoneNumber != null and telphoneNumber != ''" > 
+			    #{telphoneNumber,jdbcType=VARCHAR},
+			</if>
+			<if test="channelId != null and channelId != ''" > 
+			    #{channelId,jdbcType=VARCHAR},
+			</if>
+			<if test="channelUserId != null and channelUserId != ''" > 
+			    #{channelUserId,jdbcType=VARCHAR},
+			</if>
+			<if test="consoleUserId != null and consoleUserId != ''" > 
+			    #{consoleUserId,jdbcType=VARCHAR},
+			</if>
+			<if test="distributeDate != null" >
+			    #{distributeDate,jdbcType=BIGINT},
+			</if>    
+			<if test="distributeTime != null" >
+			    #{distributeTime,jdbcType=BIGINT},
+			</if>    
+			<if test="employeeOneUserId != null and employeeOneUserId != ''" > 
+			    #{employeeOneUserId,jdbcType=VARCHAR},
+			</if>
+			<if test="isDial != null" >
+			    #{isDial,jdbcType=TINYINT},
+			</if>    
+			<if test="isPurpose != null" >
+			    #{isPurpose,jdbcType=TINYINT},
+			</if>    
+			<if test="purposeDescript != null and purposeDescript != ''" > 
+			    #{purposeDescript,jdbcType=VARCHAR},
+			</if>
+			<if test="dialDate != null" >
+			    #{dialDate,jdbcType=BIGINT},
+			</if>    
+			<if test="dialTime != null" >
+			    #{dialTime,jdbcType=BIGINT},
+			</if>    
+			<if test="realName != null and realName != ''" > 
+			    #{realName,jdbcType=VARCHAR},
+			</if>
+			<if test="isReal != null" >
+			    #{isReal,jdbcType=TINYINT},
+			</if>    
+			<if test="servicePassword != null and servicePassword != ''" > 
+			    #{servicePassword,jdbcType=VARCHAR},
+			</if>
+			<if test="phoneUseYear != null and phoneUseYear != ''" > 
+			    #{phoneUseYear,jdbcType=VARCHAR},
+			</if>
+			<if test="identificationCardNumber != null and identificationCardNumber != ''" > 
+			    #{identificationCardNumber,jdbcType=VARCHAR},
+			</if>
+			<if test="seseamScore != null" >
+			    #{seseamScore,jdbcType=BIGINT},
+			</if>    
+			<if test="naughtyScore != null" >
+			    #{naughtyScore,jdbcType=BIGINT},
+			</if>    
+			<if test="realEducation != null and realEducation != ''" > 
+			    #{realEducation,jdbcType=VARCHAR},
+			</if>
+			<if test="isHouseLoan != null" >
+			    #{isHouseLoan,jdbcType=TINYINT},
+			</if>    
+			<if test="isAccumulationFund != null" >
+			    #{isAccumulationFund,jdbcType=TINYINT},
+			</if>    
+			<if test="isCreadit != null" >
+			    #{isCreadit,jdbcType=TINYINT},
+			</if>    
+			<if test="creadit != null" >
+			    #{creadit,jdbcType=DECIMAL},
+			</if>    
+			<if test="companyName != null and companyName != ''" > 
+			    #{companyName,jdbcType=VARCHAR},
+			</if>
+			<if test="companyPlace != null and companyPlace != ''" > 
+			    #{companyPlace,jdbcType=VARCHAR},
+			</if>
+			<if test="livePlace != null and livePlace != ''" > 
+			    #{livePlace,jdbcType=VARCHAR},
+			</if>
+			<if test="contractNameOne != null and contractNameOne != ''" > 
+			    #{contractNameOne,jdbcType=VARCHAR},
+			</if>
+			<if test="contractTelphoneOne != null and contractTelphoneOne != ''" > 
+			    #{contractTelphoneOne,jdbcType=VARCHAR},
+			</if>
+			<if test="contractRelationOne != null and contractRelationOne != ''" > 
+			    #{contractRelationOne,jdbcType=VARCHAR},
+			</if>
+			<if test="contractNameTwo != null and contractNameTwo != ''" > 
+			    #{contractNameTwo,jdbcType=VARCHAR},
+			</if>
+			<if test="contractTelphoneTwo != null and contractTelphoneTwo != ''" > 
+			    #{contractTelphoneTwo,jdbcType=VARCHAR},
+			</if>
+			<if test="contractRelationTwo != null and contractRelationTwo != ''" > 
+			    #{contractRelationTwo,jdbcType=VARCHAR},
+			</if>
+			<if test="contractNameThree != null and contractNameThree != ''" > 
+			    #{contractNameThree,jdbcType=VARCHAR},
+			</if>
+			<if test="contractTelphoneThree != null and contractTelphoneThree != ''" > 
+			    #{contractTelphoneThree,jdbcType=VARCHAR},
+			</if>
+			<if test="contractRelationThree != null and contractRelationThree != ''" > 
+			    #{contractRelationThree,jdbcType=VARCHAR},
+			</if>
+			<if test="contractNameFour != null and contractNameFour != ''" > 
+			    #{contractNameFour,jdbcType=VARCHAR},
+			</if>
+			<if test="contractTelphoneFour != null and contractTelphoneFour != ''" > 
+			    #{contractTelphoneFour,jdbcType=VARCHAR},
+			</if>
+			<if test="contractRelationFour != null and contractRelationFour != ''" > 
+			    #{contractRelationFour,jdbcType=VARCHAR},
+			</if>
+			<if test="contractNameFive != null and contractNameFive != ''" > 
+			    #{contractNameFive,jdbcType=VARCHAR},
+			</if>
+			<if test="contractTelphoneFive != null and contractTelphoneFive != ''" > 
+			    #{contractTelphoneFive,jdbcType=VARCHAR},
+			</if>
+			<if test="contractRelationFive != null and contractRelationFive != ''" > 
+			    #{contractRelationFive,jdbcType=VARCHAR},
+			</if>
+			<if test="osVersion != null and osVersion != ''" > 
+			    #{osVersion,jdbcType=VARCHAR},
+			</if>
+			<if test="fillDate != null" >
+			    #{fillDate,jdbcType=BIGINT},
+			</if>    
+			<if test="fillTime != null" >
+			    #{fillTime,jdbcType=BIGINT},
+			</if>    
+			<if test="employeeTwoUserId != null and employeeTwoUserId != ''" > 
+			    #{employeeTwoUserId,jdbcType=VARCHAR},
+			</if>
+			<if test="isFill != null" >
+			    #{isFill,jdbcType=TINYINT},
+			</if>    
+			<if test="isHanle != null" >
+			    #{isHanle,jdbcType=TINYINT},
+			</if>    
+			<if test="handleDescript != null and handleDescript != ''" > 
+			    #{handleDescript,jdbcType=VARCHAR},
+			</if>
+			<if test="handleDate != null" >
+			    #{handleDate,jdbcType=BIGINT},
+			</if>    
+			<if test="handleTime != null" >
+			    #{handleTime,jdbcType=BIGINT},
+			</if>    
+			DATE_FORMAT(NOW(),'%Y%m%d'),DATE_FORMAT(NOW(),'%H%i%S%f')/1000,		
+		</trim>
+	</insert>
+	
+	
+	
+	<!--批量插入-->
+	<insert id="insertBatch" parameterType="java.util.List">
+		insert into client_data(id,telphone_number,channel_id,channel_user_id,create_date,create_time,console_user_id,distribute_date,distribute_time,employee_one_user_id,is_dial,is_purpose,purpose_descript,dial_date,dial_time,real_name,is_real,service_password,phone_use_year,identification_card_number,seseam_score,naughty_score,real_education,is_house_loan,is_accumulation_fund,is_creadit,creadit,company_name,company_place,live_place,contract_name_one,contract_telphone_one,contract_relation_one,contract_name_two,contract_telphone_two,contract_relation_two,contract_name_three,contract_telphone_three,contract_relation_three,contract_name_four,contract_telphone_four,contract_relation_four,contract_name_five,contract_telphone_five,contract_relation_five,os_version,fill_date,fill_time,employee_two_user_id,is_fill,is_hanle,handle_descript,handle_date,handle_time) values 
+		<foreach collection="list" item="item" index="index" separator=",">
+			(REPLACE(UUID(),'-',''),#{item.telphoneNumber},#{item.channelId},#{item.channelUserId},DATE_FORMAT(NOW(),'%Y%m%d'),DATE_FORMAT(NOW(),'%H%i%S%f')/1000,#{item.consoleUserId},#{item.distributeDate},#{item.distributeTime},#{item.employeeOneUserId},#{item.isDial},#{item.isPurpose},#{item.purposeDescript},#{item.dialDate},#{item.dialTime},#{item.realName},#{item.isReal},#{item.servicePassword},#{item.phoneUseYear},#{item.identificationCardNumber},#{item.seseamScore},#{item.naughtyScore},#{item.realEducation},#{item.isHouseLoan},#{item.isAccumulationFund},#{item.isCreadit},#{item.creadit},#{item.companyName},#{item.companyPlace},#{item.livePlace},#{item.contractNameOne},#{item.contractTelphoneOne},#{item.contractRelationOne},#{item.contractNameTwo},#{item.contractTelphoneTwo},#{item.contractRelationTwo},#{item.contractNameThree},#{item.contractTelphoneThree},#{item.contractRelationThree},#{item.contractNameFour},#{item.contractTelphoneFour},#{item.contractRelationFour},#{item.contractNameFive},#{item.contractTelphoneFive},#{item.contractRelationFive},#{item.osVersion},#{item.fillDate},#{item.fillTime},#{item.employeeTwoUserId},#{item.isFill},#{item.isHanle},#{item.handleDescript},#{item.handleDate},#{item.handleTime})
+		</foreach>
+	</insert>
+	
+	<!--根据传入的参数批量插入-->
+	<insert id="insertByParams" parameterType="map">
+		<if test="vlParamLs!=null and vlParamLs.size()>0">
+			insert into client_data(id,
+			<if test="fields!=null and fields!=''">
+				${fields},
+			</if>		
+			create_date,create_time) values 
+			<foreach collection="vlParamLs" item="item" index="index" separator="," >
+ 				(REPLACE(UUID(),'-',''), 
+ 				<foreach collection="item.values" item = "value">
+					#{value},
+ 				</foreach>
+ 				DATE_FORMAT(NOW(),'%Y%m%d'),DATE_FORMAT(NOW(),'%H%i%S%f')/1000)
+			</foreach>
+		</if>
+	</insert>
+		
+	
+	<!--根据ID更新-->
+	<update id="updateById" parameterType="clientData" >
+		<if test="record!=null and record.id!=null and record.id!=''">
+			update client_data
+			<set>
+				<if test="record.telphoneNumber != null and record.telphoneNumber != ''" > 
+					telphone_number=  #{record.telphoneNumber,jdbcType=VARCHAR},
+				</if>
+				<if test="record.channelId != null and record.channelId != ''" > 
+					channel_id=  #{record.channelId,jdbcType=VARCHAR},
+				</if>
+				<if test="record.channelUserId != null and record.channelUserId != ''" > 
+					channel_user_id=  #{record.channelUserId,jdbcType=VARCHAR},
+				</if>
+				<if test="record.consoleUserId != null and record.consoleUserId != ''" > 
+					console_user_id=  #{record.consoleUserId,jdbcType=VARCHAR},
+				</if>
+				<if test="record.distributeDate != null" >
+					distribute_date=  #{record.distributeDate,jdbcType=BIGINT},
+				</if>    
+				<if test="record.distributeTime != null" >
+					distribute_time=  #{record.distributeTime,jdbcType=BIGINT},
+				</if>    
+				<if test="record.employeeOneUserId != null and record.employeeOneUserId != ''" > 
+					employee_one_user_id=  #{record.employeeOneUserId,jdbcType=VARCHAR},
+				</if>
+				<if test="record.isDial != null" >
+					is_dial=  #{record.isDial,jdbcType=TINYINT},
+				</if>    
+				<if test="record.isPurpose != null" >
+					is_purpose=  #{record.isPurpose,jdbcType=TINYINT},
+				</if>    
+				<if test="record.purposeDescript != null and record.purposeDescript != ''" > 
+					purpose_descript=  #{record.purposeDescript,jdbcType=VARCHAR},
+				</if>
+				<if test="record.dialDate != null" >
+					dial_date=  #{record.dialDate,jdbcType=BIGINT},
+				</if>    
+				<if test="record.dialTime != null" >
+					dial_time=  #{record.dialTime,jdbcType=BIGINT},
+				</if>    
+				<if test="record.realName != null and record.realName != ''" > 
+					real_name=  #{record.realName,jdbcType=VARCHAR},
+				</if>
+				<if test="record.isReal != null" >
+					is_real=  #{record.isReal,jdbcType=TINYINT},
+				</if>    
+				<if test="record.servicePassword != null and record.servicePassword != ''" > 
+					service_password=  #{record.servicePassword,jdbcType=VARCHAR},
+				</if>
+				<if test="record.phoneUseYear != null and record.phoneUseYear != ''" > 
+					phone_use_year=  #{record.phoneUseYear,jdbcType=VARCHAR},
+				</if>
+				<if test="record.identificationCardNumber != null and record.identificationCardNumber != ''" > 
+					identification_card_number=  #{record.identificationCardNumber,jdbcType=VARCHAR},
+				</if>
+				<if test="record.seseamScore != null" >
+					seseam_score=  #{record.seseamScore,jdbcType=BIGINT},
+				</if>    
+				<if test="record.naughtyScore != null" >
+					naughty_score=  #{record.naughtyScore,jdbcType=BIGINT},
+				</if>    
+				<if test="record.realEducation != null and record.realEducation != ''" > 
+					real_education=  #{record.realEducation,jdbcType=VARCHAR},
+				</if>
+				<if test="record.isHouseLoan != null" >
+					is_house_loan=  #{record.isHouseLoan,jdbcType=TINYINT},
+				</if>    
+				<if test="record.isAccumulationFund != null" >
+					is_accumulation_fund=  #{record.isAccumulationFund,jdbcType=TINYINT},
+				</if>    
+				<if test="record.isCreadit != null" >
+					is_creadit=  #{record.isCreadit,jdbcType=TINYINT},
+				</if>    
+				<if test="record.creadit != null" >
+					creadit=  #{record.creadit,jdbcType=DECIMAL},
+				</if>    
+				<if test="record.companyName != null and record.companyName != ''" > 
+					company_name=  #{record.companyName,jdbcType=VARCHAR},
+				</if>
+				<if test="record.companyPlace != null and record.companyPlace != ''" > 
+					company_place=  #{record.companyPlace,jdbcType=VARCHAR},
+				</if>
+				<if test="record.livePlace != null and record.livePlace != ''" > 
+					live_place=  #{record.livePlace,jdbcType=VARCHAR},
+				</if>
+				<if test="record.contractNameOne != null and record.contractNameOne != ''" > 
+					contract_name_one=  #{record.contractNameOne,jdbcType=VARCHAR},
+				</if>
+				<if test="record.contractTelphoneOne != null and record.contractTelphoneOne != ''" > 
+					contract_telphone_one=  #{record.contractTelphoneOne,jdbcType=VARCHAR},
+				</if>
+				<if test="record.contractRelationOne != null and record.contractRelationOne != ''" > 
+					contract_relation_one=  #{record.contractRelationOne,jdbcType=VARCHAR},
+				</if>
+				<if test="record.contractNameTwo != null and record.contractNameTwo != ''" > 
+					contract_name_two=  #{record.contractNameTwo,jdbcType=VARCHAR},
+				</if>
+				<if test="record.contractTelphoneTwo != null and record.contractTelphoneTwo != ''" > 
+					contract_telphone_two=  #{record.contractTelphoneTwo,jdbcType=VARCHAR},
+				</if>
+				<if test="record.contractRelationTwo != null and record.contractRelationTwo != ''" > 
+					contract_relation_two=  #{record.contractRelationTwo,jdbcType=VARCHAR},
+				</if>
+				<if test="record.contractNameThree != null and record.contractNameThree != ''" > 
+					contract_name_three=  #{record.contractNameThree,jdbcType=VARCHAR},
+				</if>
+				<if test="record.contractTelphoneThree != null and record.contractTelphoneThree != ''" > 
+					contract_telphone_three=  #{record.contractTelphoneThree,jdbcType=VARCHAR},
+				</if>
+				<if test="record.contractRelationThree != null and record.contractRelationThree != ''" > 
+					contract_relation_three=  #{record.contractRelationThree,jdbcType=VARCHAR},
+				</if>
+				<if test="record.contractNameFour != null and record.contractNameFour != ''" > 
+					contract_name_four=  #{record.contractNameFour,jdbcType=VARCHAR},
+				</if>
+				<if test="record.contractTelphoneFour != null and record.contractTelphoneFour != ''" > 
+					contract_telphone_four=  #{record.contractTelphoneFour,jdbcType=VARCHAR},
+				</if>
+				<if test="record.contractRelationFour != null and record.contractRelationFour != ''" > 
+					contract_relation_four=  #{record.contractRelationFour,jdbcType=VARCHAR},
+				</if>
+				<if test="record.contractNameFive != null and record.contractNameFive != ''" > 
+					contract_name_five=  #{record.contractNameFive,jdbcType=VARCHAR},
+				</if>
+				<if test="record.contractTelphoneFive != null and record.contractTelphoneFive != ''" > 
+					contract_telphone_five=  #{record.contractTelphoneFive,jdbcType=VARCHAR},
+				</if>
+				<if test="record.contractRelationFive != null and record.contractRelationFive != ''" > 
+					contract_relation_five=  #{record.contractRelationFive,jdbcType=VARCHAR},
+				</if>
+				<if test="record.osVersion != null and record.osVersion != ''" > 
+					os_version=  #{record.osVersion,jdbcType=VARCHAR},
+				</if>
+				<if test="record.fillDate != null" >
+					fill_date=  #{record.fillDate,jdbcType=BIGINT},
+				</if>    
+				<if test="record.fillTime != null" >
+					fill_time=  #{record.fillTime,jdbcType=BIGINT},
+				</if>    
+				<if test="record.employeeTwoUserId != null and record.employeeTwoUserId != ''" > 
+					employee_two_user_id=  #{record.employeeTwoUserId,jdbcType=VARCHAR},
+				</if>
+				<if test="record.isFill != null" >
+					is_fill=  #{record.isFill,jdbcType=TINYINT},
+				</if>    
+				<if test="record.isHanle != null" >
+					is_hanle=  #{record.isHanle,jdbcType=TINYINT},
+				</if>    
+				<if test="record.handleDescript != null and record.handleDescript != ''" > 
+					handle_descript=  #{record.handleDescript,jdbcType=VARCHAR},
+				</if>
+				<if test="record.handleDate != null" >
+					handle_date=  #{record.handleDate,jdbcType=BIGINT},
+				</if>    
+				<if test="record.handleTime != null" >
+					handle_time=  #{record.handleTime,jdbcType=BIGINT},
+				</if>    
+			</set>
+			where id =  #{record.id,jdbcType=VARCHAR}
+		</if>  
+	</update> 
+
+	<!--根据多个条件多个值更新-->
+	<update id="updateByParams" parameterType="map">
+		<if test="record!=null">
+			update client_data
+			<set>
+				<if test="record.telphoneNumber != null and record.telphoneNumber != ''" > 
+					telphone_number=  #{record.telphoneNumber,jdbcType=VARCHAR},
+				</if>
+				<if test="record.channelId != null and record.channelId != ''" > 
+					channel_id=  #{record.channelId,jdbcType=VARCHAR},
+				</if>
+				<if test="record.channelUserId != null and record.channelUserId != ''" > 
+					channel_user_id=  #{record.channelUserId,jdbcType=VARCHAR},
+				</if>
+				<if test="record.consoleUserId != null and record.consoleUserId != ''" > 
+					console_user_id=  #{record.consoleUserId,jdbcType=VARCHAR},
+				</if>
+				<if test="record.distributeDate != null" >
+					distribute_date=  #{record.distributeDate,jdbcType=BIGINT},
+				</if>    
+				<if test="record.distributeTime != null" >
+					distribute_time=  #{record.distributeTime,jdbcType=BIGINT},
+				</if>    
+				<if test="record.employeeOneUserId != null and record.employeeOneUserId != ''" > 
+					employee_one_user_id=  #{record.employeeOneUserId,jdbcType=VARCHAR},
+				</if>
+				<if test="record.isDial != null" >
+					is_dial=  #{record.isDial,jdbcType=TINYINT},
+				</if>    
+				<if test="record.isPurpose != null" >
+					is_purpose=  #{record.isPurpose,jdbcType=TINYINT},
+				</if>    
+				<if test="record.purposeDescript != null and record.purposeDescript != ''" > 
+					purpose_descript=  #{record.purposeDescript,jdbcType=VARCHAR},
+				</if>
+				<if test="record.dialDate != null" >
+					dial_date=  #{record.dialDate,jdbcType=BIGINT},
+				</if>    
+				<if test="record.dialTime != null" >
+					dial_time=  #{record.dialTime,jdbcType=BIGINT},
+				</if>    
+				<if test="record.realName != null and record.realName != ''" > 
+					real_name=  #{record.realName,jdbcType=VARCHAR},
+				</if>
+				<if test="record.isReal != null" >
+					is_real=  #{record.isReal,jdbcType=TINYINT},
+				</if>    
+				<if test="record.servicePassword != null and record.servicePassword != ''" > 
+					service_password=  #{record.servicePassword,jdbcType=VARCHAR},
+				</if>
+				<if test="record.phoneUseYear != null and record.phoneUseYear != ''" > 
+					phone_use_year=  #{record.phoneUseYear,jdbcType=VARCHAR},
+				</if>
+				<if test="record.identificationCardNumber != null and record.identificationCardNumber != ''" > 
+					identification_card_number=  #{record.identificationCardNumber,jdbcType=VARCHAR},
+				</if>
+				<if test="record.seseamScore != null" >
+					seseam_score=  #{record.seseamScore,jdbcType=BIGINT},
+				</if>    
+				<if test="record.naughtyScore != null" >
+					naughty_score=  #{record.naughtyScore,jdbcType=BIGINT},
+				</if>    
+				<if test="record.realEducation != null and record.realEducation != ''" > 
+					real_education=  #{record.realEducation,jdbcType=VARCHAR},
+				</if>
+				<if test="record.isHouseLoan != null" >
+					is_house_loan=  #{record.isHouseLoan,jdbcType=TINYINT},
+				</if>    
+				<if test="record.isAccumulationFund != null" >
+					is_accumulation_fund=  #{record.isAccumulationFund,jdbcType=TINYINT},
+				</if>    
+				<if test="record.isCreadit != null" >
+					is_creadit=  #{record.isCreadit,jdbcType=TINYINT},
+				</if>    
+				<if test="record.creadit != null" >
+					creadit=  #{record.creadit,jdbcType=DECIMAL},
+				</if>    
+				<if test="record.companyName != null and record.companyName != ''" > 
+					company_name=  #{record.companyName,jdbcType=VARCHAR},
+				</if>
+				<if test="record.companyPlace != null and record.companyPlace != ''" > 
+					company_place=  #{record.companyPlace,jdbcType=VARCHAR},
+				</if>
+				<if test="record.livePlace != null and record.livePlace != ''" > 
+					live_place=  #{record.livePlace,jdbcType=VARCHAR},
+				</if>
+				<if test="record.contractNameOne != null and record.contractNameOne != ''" > 
+					contract_name_one=  #{record.contractNameOne,jdbcType=VARCHAR},
+				</if>
+				<if test="record.contractTelphoneOne != null and record.contractTelphoneOne != ''" > 
+					contract_telphone_one=  #{record.contractTelphoneOne,jdbcType=VARCHAR},
+				</if>
+				<if test="record.contractRelationOne != null and record.contractRelationOne != ''" > 
+					contract_relation_one=  #{record.contractRelationOne,jdbcType=VARCHAR},
+				</if>
+				<if test="record.contractNameTwo != null and record.contractNameTwo != ''" > 
+					contract_name_two=  #{record.contractNameTwo,jdbcType=VARCHAR},
+				</if>
+				<if test="record.contractTelphoneTwo != null and record.contractTelphoneTwo != ''" > 
+					contract_telphone_two=  #{record.contractTelphoneTwo,jdbcType=VARCHAR},
+				</if>
+				<if test="record.contractRelationTwo != null and record.contractRelationTwo != ''" > 
+					contract_relation_two=  #{record.contractRelationTwo,jdbcType=VARCHAR},
+				</if>
+				<if test="record.contractNameThree != null and record.contractNameThree != ''" > 
+					contract_name_three=  #{record.contractNameThree,jdbcType=VARCHAR},
+				</if>
+				<if test="record.contractTelphoneThree != null and record.contractTelphoneThree != ''" > 
+					contract_telphone_three=  #{record.contractTelphoneThree,jdbcType=VARCHAR},
+				</if>
+				<if test="record.contractRelationThree != null and record.contractRelationThree != ''" > 
+					contract_relation_three=  #{record.contractRelationThree,jdbcType=VARCHAR},
+				</if>
+				<if test="record.contractNameFour != null and record.contractNameFour != ''" > 
+					contract_name_four=  #{record.contractNameFour,jdbcType=VARCHAR},
+				</if>
+				<if test="record.contractTelphoneFour != null and record.contractTelphoneFour != ''" > 
+					contract_telphone_four=  #{record.contractTelphoneFour,jdbcType=VARCHAR},
+				</if>
+				<if test="record.contractRelationFour != null and record.contractRelationFour != ''" > 
+					contract_relation_four=  #{record.contractRelationFour,jdbcType=VARCHAR},
+				</if>
+				<if test="record.contractNameFive != null and record.contractNameFive != ''" > 
+					contract_name_five=  #{record.contractNameFive,jdbcType=VARCHAR},
+				</if>
+				<if test="record.contractTelphoneFive != null and record.contractTelphoneFive != ''" > 
+					contract_telphone_five=  #{record.contractTelphoneFive,jdbcType=VARCHAR},
+				</if>
+				<if test="record.contractRelationFive != null and record.contractRelationFive != ''" > 
+					contract_relation_five=  #{record.contractRelationFive,jdbcType=VARCHAR},
+				</if>
+				<if test="record.osVersion != null and record.osVersion != ''" > 
+					os_version=  #{record.osVersion,jdbcType=VARCHAR},
+				</if>
+				<if test="record.fillDate != null" >
+					fill_date=  #{record.fillDate,jdbcType=BIGINT},
+				</if>    
+				<if test="record.fillTime != null" >
+					fill_time=  #{record.fillTime,jdbcType=BIGINT},
+				</if>    
+				<if test="record.employeeTwoUserId != null and record.employeeTwoUserId != ''" > 
+					employee_two_user_id=  #{record.employeeTwoUserId,jdbcType=VARCHAR},
+				</if>
+				<if test="record.isFill != null" >
+					is_fill=  #{record.isFill,jdbcType=TINYINT},
+				</if>    
+				<if test="record.isHanle != null" >
+					is_hanle=  #{record.isHanle,jdbcType=TINYINT},
+				</if>    
+				<if test="record.handleDescript != null and record.handleDescript != ''" > 
+					handle_descript=  #{record.handleDescript,jdbcType=VARCHAR},
+				</if>
+				<if test="record.handleDate != null" >
+					handle_date=  #{record.handleDate,jdbcType=BIGINT},
+				</if>    
+				<if test="record.handleTime != null" >
+					handle_time=  #{record.handleTime,jdbcType=BIGINT},
+				</if>    
+			</set>
+			<if test="whParamLs!=null and whParamLs.size()>0">
+				<trim prefix="where" prefixOverrides="and">
+					<foreach collection="whParam.keys" item = "key">
+						<if test="whParamLs[key]!=null and whParamLs[key].size()>0">
+							<trim prefix="and">
+								<foreach collection="whParamLs[key]" item = "item" separator=" and ">
+									 ${key}=#{item}
+								</foreach>
+							</trim>
+						</if>
+					</foreach>
+				</trim>
+			</if>
+		</if>
+	</update> 
+	
+    <!--删除全部-->
+	<delete id="deleteAll">
+		delete from client_data
+	</delete>
+	
+	<!--根据条件删除-->
+	<delete id="delete" parameterType="clientData">
+		<if test="record!=null">
+			delete from client_data 
+			<trim prefix="where" prefixOverrides="and">
+				<if test="record.id != null and record.id != ''" >    
+					and id =  #{record.id,jdbcType=VARCHAR}
+				</if>
+				<if test="record.telphoneNumber != null and record.telphoneNumber != ''" >    
+					and telphone_number =  #{record.telphoneNumber,jdbcType=VARCHAR}
+				</if>
+				<if test="record.channelId != null and record.channelId != ''" >    
+					and channel_id =  #{record.channelId,jdbcType=VARCHAR}
+				</if>
+				<if test="record.channelUserId != null and record.channelUserId != ''" >    
+					and channel_user_id =  #{record.channelUserId,jdbcType=VARCHAR}
+				</if>
+			    <if test="record.createDate != null" >
+					and create_date =  #{record.createDate,jdbcType=BIGINT}
+				</if>    
+			    <if test="record.createTime != null" >
+					and create_time =  #{record.createTime,jdbcType=BIGINT}
+				</if>    
+				<if test="record.consoleUserId != null and record.consoleUserId != ''" >    
+					and console_user_id =  #{record.consoleUserId,jdbcType=VARCHAR}
+				</if>
+			    <if test="record.distributeDate != null" >
+					and distribute_date =  #{record.distributeDate,jdbcType=BIGINT}
+				</if>    
+			    <if test="record.distributeTime != null" >
+					and distribute_time =  #{record.distributeTime,jdbcType=BIGINT}
+				</if>    
+				<if test="record.employeeOneUserId != null and record.employeeOneUserId != ''" >    
+					and employee_one_user_id =  #{record.employeeOneUserId,jdbcType=VARCHAR}
+				</if>
+			    <if test="record.isDial != null" >
+					and is_dial =  #{record.isDial,jdbcType=TINYINT}
+				</if>    
+			    <if test="record.isPurpose != null" >
+					and is_purpose =  #{record.isPurpose,jdbcType=TINYINT}
+				</if>    
+				<if test="record.purposeDescript != null and record.purposeDescript != ''" >    
+					and purpose_descript =  #{record.purposeDescript,jdbcType=VARCHAR}
+				</if>
+			    <if test="record.dialDate != null" >
+					and dial_date =  #{record.dialDate,jdbcType=BIGINT}
+				</if>    
+			    <if test="record.dialTime != null" >
+					and dial_time =  #{record.dialTime,jdbcType=BIGINT}
+				</if>    
+				<if test="record.realName != null and record.realName != ''" >    
+					and real_name =  #{record.realName,jdbcType=VARCHAR}
+				</if>
+			    <if test="record.isReal != null" >
+					and is_real =  #{record.isReal,jdbcType=TINYINT}
+				</if>    
+				<if test="record.servicePassword != null and record.servicePassword != ''" >    
+					and service_password =  #{record.servicePassword,jdbcType=VARCHAR}
+				</if>
+				<if test="record.phoneUseYear != null and record.phoneUseYear != ''" >    
+					and phone_use_year =  #{record.phoneUseYear,jdbcType=VARCHAR}
+				</if>
+				<if test="record.identificationCardNumber != null and record.identificationCardNumber != ''" >    
+					and identification_card_number =  #{record.identificationCardNumber,jdbcType=VARCHAR}
+				</if>
+			    <if test="record.seseamScore != null" >
+					and seseam_score =  #{record.seseamScore,jdbcType=BIGINT}
+				</if>    
+			    <if test="record.naughtyScore != null" >
+					and naughty_score =  #{record.naughtyScore,jdbcType=BIGINT}
+				</if>    
+				<if test="record.realEducation != null and record.realEducation != ''" >    
+					and real_education =  #{record.realEducation,jdbcType=VARCHAR}
+				</if>
+			    <if test="record.isHouseLoan != null" >
+					and is_house_loan =  #{record.isHouseLoan,jdbcType=TINYINT}
+				</if>    
+			    <if test="record.isAccumulationFund != null" >
+					and is_accumulation_fund =  #{record.isAccumulationFund,jdbcType=TINYINT}
+				</if>    
+			    <if test="record.isCreadit != null" >
+					and is_creadit =  #{record.isCreadit,jdbcType=TINYINT}
+				</if>    
+			    <if test="record.creadit != null" >
+					and creadit =  #{record.creadit,jdbcType=DECIMAL}
+				</if>    
+				<if test="record.companyName != null and record.companyName != ''" >    
+					and company_name =  #{record.companyName,jdbcType=VARCHAR}
+				</if>
+				<if test="record.companyPlace != null and record.companyPlace != ''" >    
+					and company_place =  #{record.companyPlace,jdbcType=VARCHAR}
+				</if>
+				<if test="record.livePlace != null and record.livePlace != ''" >    
+					and live_place =  #{record.livePlace,jdbcType=VARCHAR}
+				</if>
+				<if test="record.contractNameOne != null and record.contractNameOne != ''" >    
+					and contract_name_one =  #{record.contractNameOne,jdbcType=VARCHAR}
+				</if>
+				<if test="record.contractTelphoneOne != null and record.contractTelphoneOne != ''" >    
+					and contract_telphone_one =  #{record.contractTelphoneOne,jdbcType=VARCHAR}
+				</if>
+				<if test="record.contractRelationOne != null and record.contractRelationOne != ''" >    
+					and contract_relation_one =  #{record.contractRelationOne,jdbcType=VARCHAR}
+				</if>
+				<if test="record.contractNameTwo != null and record.contractNameTwo != ''" >    
+					and contract_name_two =  #{record.contractNameTwo,jdbcType=VARCHAR}
+				</if>
+				<if test="record.contractTelphoneTwo != null and record.contractTelphoneTwo != ''" >    
+					and contract_telphone_two =  #{record.contractTelphoneTwo,jdbcType=VARCHAR}
+				</if>
+				<if test="record.contractRelationTwo != null and record.contractRelationTwo != ''" >    
+					and contract_relation_two =  #{record.contractRelationTwo,jdbcType=VARCHAR}
+				</if>
+				<if test="record.contractNameThree != null and record.contractNameThree != ''" >    
+					and contract_name_three =  #{record.contractNameThree,jdbcType=VARCHAR}
+				</if>
+				<if test="record.contractTelphoneThree != null and record.contractTelphoneThree != ''" >    
+					and contract_telphone_three =  #{record.contractTelphoneThree,jdbcType=VARCHAR}
+				</if>
+				<if test="record.contractRelationThree != null and record.contractRelationThree != ''" >    
+					and contract_relation_three =  #{record.contractRelationThree,jdbcType=VARCHAR}
+				</if>
+				<if test="record.contractNameFour != null and record.contractNameFour != ''" >    
+					and contract_name_four =  #{record.contractNameFour,jdbcType=VARCHAR}
+				</if>
+				<if test="record.contractTelphoneFour != null and record.contractTelphoneFour != ''" >    
+					and contract_telphone_four =  #{record.contractTelphoneFour,jdbcType=VARCHAR}
+				</if>
+				<if test="record.contractRelationFour != null and record.contractRelationFour != ''" >    
+					and contract_relation_four =  #{record.contractRelationFour,jdbcType=VARCHAR}
+				</if>
+				<if test="record.contractNameFive != null and record.contractNameFive != ''" >    
+					and contract_name_five =  #{record.contractNameFive,jdbcType=VARCHAR}
+				</if>
+				<if test="record.contractTelphoneFive != null and record.contractTelphoneFive != ''" >    
+					and contract_telphone_five =  #{record.contractTelphoneFive,jdbcType=VARCHAR}
+				</if>
+				<if test="record.contractRelationFive != null and record.contractRelationFive != ''" >    
+					and contract_relation_five =  #{record.contractRelationFive,jdbcType=VARCHAR}
+				</if>
+				<if test="record.osVersion != null and record.osVersion != ''" >    
+					and os_version =  #{record.osVersion,jdbcType=VARCHAR}
+				</if>
+			    <if test="record.fillDate != null" >
+					and fill_date =  #{record.fillDate,jdbcType=BIGINT}
+				</if>    
+			    <if test="record.fillTime != null" >
+					and fill_time =  #{record.fillTime,jdbcType=BIGINT}
+				</if>    
+				<if test="record.employeeTwoUserId != null and record.employeeTwoUserId != ''" >    
+					and employee_two_user_id =  #{record.employeeTwoUserId,jdbcType=VARCHAR}
+				</if>
+			    <if test="record.isFill != null" >
+					and is_fill =  #{record.isFill,jdbcType=TINYINT}
+				</if>    
+			    <if test="record.isHanle != null" >
+					and is_hanle =  #{record.isHanle,jdbcType=TINYINT}
+				</if>    
+				<if test="record.handleDescript != null and record.handleDescript != ''" >    
+					and handle_descript =  #{record.handleDescript,jdbcType=VARCHAR}
+				</if>
+			    <if test="record.handleDate != null" >
+					and handle_date =  #{record.handleDate,jdbcType=BIGINT}
+				</if>    
+			    <if test="record.handleTime != null" >
+					and handle_time =  #{record.handleTime,jdbcType=BIGINT}
+				</if>    
+			</trim>
+		</if>	
+	</delete>
+	
+	<!--根据多个字段多个值删除-->
+	<delete id="deleteByParams" parameterType="map" >
+		<if test="whParams!=null and whParams.size()>0">
+			delete from client_data 
+			<trim prefix="where" prefixOverrides="and">
+				<foreach collection="whParams.keys" item = "key">
+					<if test="whParams[key]!=null and whParams[key].size()>0">
+						<trim prefix="and">
+							<foreach collection="whParams[key]" item = "item" open="(" separator=" or " close=")">
+								 ${key}=#{item}
+							</foreach>
+						</trim>
+					</if>
+				</foreach>
+			</trim>
+		</if>
+	</delete>
+	
+	<!--根据主键删除-->
+	<delete id="deleteById" parameterType="java.lang.String" >
+		<if test="id!= null and id!= ''">
+			delete from client_data where id =  #{id,jdbcType=VARCHAR}
+		</if>
+	</delete>
+
+	<!--根据多个ID批量删除(普通结构)-->
+	<delete id = "deleteByIds" parameterType = "map">
+		<if test="idLs != null and idLs.size()>0">
+			delete from client_data 
+			<trim prefix="where" prefixOverrides="and">
+				and id in 
+				<foreach collection="idLs" item = "id" open="(" separator="," close=")">
+					 #{id,jdbcType=VARCHAR}
+				</foreach>
+			</trim>
+		</if>
+	</delete>
+</mapper>
+

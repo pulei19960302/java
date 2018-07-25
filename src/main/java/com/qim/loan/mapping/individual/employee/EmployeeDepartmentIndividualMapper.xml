@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.qim.loan.dao.employee.EmployeeDepartmentDao" >
+  	<resultMap id="IndividualResultMap" type="com.qim.loan.entity.employee.EmployeeDepartment">
+    	<id column="id" property="id" jdbcType="VARCHAR" />	
+    	<result column="employee_department_name" property="employeeDepartmentName" jdbcType="VARCHAR" />
+    	<result column="is_track" property="isTrack" jdbcType="TINYINT" />
+    	<result column="is_online" property="isOnline" jdbcType="TINYINT" />
+    	<result column="create_date" property="createDate" jdbcType="BIGINT" />
+    	<result column="create_time" property="createTime" jdbcType="BIGINT" />
+  	</resultMap>
+	<!--请在以下空白处编写新的SQL(仅限Java开发人员使用)-->
+ 	
+</mapper>

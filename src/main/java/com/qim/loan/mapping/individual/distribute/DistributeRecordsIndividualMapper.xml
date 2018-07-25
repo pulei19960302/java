@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.qim.loan.dao.distribute.DistributeRecordsDao" >
+  	<resultMap id="IndividualResultMap" type="com.qim.loan.entity.distribute.DistributeRecords">
+    	<id column="id" property="id" jdbcType="VARCHAR" />	
+    	<result column="client_data_id" property="clientDataId" jdbcType="VARCHAR" />
+    	<result column="telphone_number" property="telphoneNumber" jdbcType="VARCHAR" />
+    	<result column="real_name" property="realName" jdbcType="VARCHAR" />
+    	<result column="create_time" property="createTime" jdbcType="BIGINT" />
+    	<result column="create_date" property="createDate" jdbcType="BIGINT" />
+    	<result column="distribute_recharge_record_id" property="distributeRechargeRecordId" jdbcType="VARCHAR" />
+    	<result column="distribute_user_id" property="distributeUserId" jdbcType="VARCHAR" />
+  	</resultMap>
+	<!--请在以下空白处编写新的SQL(仅限Java开发人员使用)-->
+	
+	<select id="getDistributeRecordsByCurrencyRecordId" parameterType="String" resultMap="IndividualResultMap">
+	      SELECT 
+	           real_name,telphone_number,create_date,create_time 
+	      from 
+	         distribute_records 
+	      WHERE 
+	          distribute_currency_record_id = #{distributeCurrencyRecordId} 
+	      AND 
+	          distribute_user_id = #{consoleUserId}
+	
+	</select>
+	
+	<select id="getClientDate" parameterType="com.qim.loan.entity.distribute.DistributeRecords" resultMap="IndividualResultMap">
+	    SELECT 
+	        id,real_name,telphone_number from client_data WHERE id 
+	    not in  
+	         (SELECT client_data_id from distribute_records WHERE distribute_user_id = #{id}) 
+	    AND fill_date= #{createDate} AND is_fill = 1
+	</select>
+	
+ 	
+</mapper>
