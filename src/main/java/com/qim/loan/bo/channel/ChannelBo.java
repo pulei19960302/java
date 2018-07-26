@@ -5,8 +5,10 @@ import com.qim.loan.entity.channel.Channel;
   
 public class ChannelBo{  
 
+
+    //第二次提交测试
 	private Channel channel;
-	
+	//提交测试
 	public Channel getChannel() {
 		return channel;
 	}
