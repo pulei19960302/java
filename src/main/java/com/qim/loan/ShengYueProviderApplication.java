@@ -45,6 +45,7 @@ public class ShengYueProviderApplication extends WebMvcConfigurationSupport {
 		registration.getUrlMappings().clear();
 		//registration.addUrlMappings("*.do");
 		//registration.addUrlMappings("*.app");
+		System.out.println("111");
 		return registration;
 	}
 
